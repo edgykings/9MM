@@ -1,0 +1,11 @@
+{
+  "name": "9minnutes-microsite",
+  "version": "1.0.0",
+  "private": true,
+  "description": "9 Minnutes (Realmark Realty) pre-launch microsite with Farvision lead sync",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build:html": "python3 tools/build_html.py",
+    "test": "node tools/test-lead.js"
+  }
+}

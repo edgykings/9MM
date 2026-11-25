@@ -1,0 +1,15 @@
+<form id="lead-form" novalidate style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Full name<input name="name" required maxlength="80" autocomplete="name" style="height:48px;padding:0 12px;border:1px solid #9A9C9E;font-size:16px"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Mobile number<input name="phone" type="tel" required inputmode="tel" maxlength="16" autocomplete="tel" placeholder="10-digit mobile" style="height:48px;padding:0 12px;border:1px solid #9A9C9E;font-size:16px"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500;grid-column:1/-1">Email (optional)<input name="email" type="email" maxlength="120" autocomplete="email" style="height:48px;padding:0 12px;border:1px solid #9A9C9E;font-size:16px"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Home you're looking for<select name="bhk" required style="height:48px;padding:0 10px;border:1px solid #9A9C9E;font-size:16px;background:#FFFFFF"><option value="">Select</option><option>2 BHK – Essential</option><option>3 BHK – Smart</option><option>3 BHK – Premium</option><option>4 BHK – Signature</option><option>Not sure yet</option></select></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Best time for a call<select name="slot" style="height:48px;padding:0 10px;border:1px solid #9A9C9E;font-size:16px;background:#FFFFFF"><option>Any time</option><option>Morning (10 am – 1 pm)</option><option>Afternoon (1 – 5 pm)</option><option>Evening (5 – 8 pm)</option></select></label>
+<div class="hp" aria-hidden="true"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
+<label style="grid-column:1/-1;display:flex;gap:10px;align-items:flex-start;font-size:13px;font-weight:300;line-height:1.5"><input type="checkbox" name="consent" required style="width:20px;height:20px;margin:0;flex:none">I agree to be contacted by Realmark Realty about 9 Minnutes by call, SMS, WhatsApp and email.</label>
+<p id="form-error" role="alert" style="grid-column:1/-1;margin:0;color:#A32D2D;font-size:14px;min-height:1em"></p>
+<button type="submit" style="grid-column:1/-1;height:54px;border:0;border-radius:999px;background:#B48B2A;color:#FFFFFF;font:inherit;font-size:17px;font-weight:600;cursor:pointer">Register interest</button>
+</form>
+<div id="lead-thanks" role="status" hidden style="padding:24px 0">
+<h3 style="margin:0 0 12px;font-size:28px;font-weight:400;color:#1C3A50">Thank you<span id="lead-name"></span>.</h3>
+<p style="margin:0;font-size:17px;font-weight:300;line-height:1.6">You're on the 9 Minnutes priority list. Our team will call you before the launch.</p>
+</div>
