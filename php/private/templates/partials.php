@@ -104,7 +104,7 @@ function render_footer(array $c, array $s, string $base = ''): void {
 <footer id="contact"><div class="in">
 <h2 class="foot-h">Get in touch</h2>
 <div class="cols">
-<div><strong>Site office</strong><br><?= e($c['site_address']) ?><br>
+<div><img src="/assets/logo-9minnutes.svg" alt="9 Minnutes" class="foot-logo foot-logo-9"><strong>Site office</strong><br><?= e($c['site_address']) ?><br>
 <a href="<?= e($telHref) ?>"><?= e($c['phone']) ?></a><br><a href="mailto:<?= e($c['email']) ?>"><?= e($c['email']) ?></a></div>
 <div><img src="/assets/logo-realmark.svg" alt="Realmark" class="foot-logo"><strong>A development by Realmark</strong><br><?= e($c['developer_address']) ?><br><?= e($c['developer_phone']) ?><br>
 <?php if ($c['main_site_url']): ?><a href="<?= e($c['main_site_url']) ?>" target="_blank" rel="noopener">Visit realmarkrealty.in</a><?php endif; ?></div>

@@ -284,3 +284,4 @@ footer .disc{margin:0;font-size:12px;line-height:1.6}
 .btn-line{display:inline-block;padding:12px 22px;border:1px solid #1C3A50;border-radius:999px;color:#1C3A50;text-decoration:none;font-size:15px}
 .btn-line:hover{background:#1C3A50;color:#fff}
 @media (max-width:640px){.mpmap{aspect-ratio:4/3}.mpmap .mp-credit{top:10px;bottom:auto;font-size:10px}}
+.foot-logo-9{height:30px;margin-bottom:8px}
