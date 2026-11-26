@@ -37,6 +37,10 @@ Copy `private/config.sample.php` to `private/config.php` and set:
 | `farvision_campaign` | `9MIN Test` (already set; campaign ID 31 in Farvision) |
 | `setup_token` | 20+ random characters. Needed once, to create the first admin account. |
 
+PHP settings (cPanel → MultiPHP INI Editor): `upload_max_filesize = 100M` and `post_max_size = 110M`, so the teaser video (MP4, up to 80 MB) can be uploaded from the admin panel. PHP extensions needed: `pdo_sqlite`, `curl`, `gd`, `fileinfo`, `mbstring`.
+
+Pages: `/` (microsite), `/privacy-policy.php`, `/disclaimer.php` (text for both is edited in admin → Content → Legal), `/admin/`.
+
 ## 3. Create the first admin
 
 Open `https://<domain>/admin/`, enter the setup code from `config.php`, your email and a password (12+ characters, letters and a number). After that the setup page is gone, and further admins are added under **Account**. You can then blank `setup_token` in `config.php`.

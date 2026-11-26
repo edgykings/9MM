@@ -66,6 +66,21 @@ function default_content(): array {
         'disclaimer' => '',
         'banner_text' => 'Pre-launch registrations now open',
         'banner_link' => '#register',
+
+        // Added 26 Nov 2026 (feedback round 1)
+        'hero_video' => '',     // uploads/… .mp4 teaser; the hero image shows until one is uploaded
+        'near_images' => [
+            'N' => 'assets/gallery/tower-metro-thumb.jpg',
+            'E' => 'assets/gallery/living-thumb.jpg',
+            'A' => 'assets/gallery/aerial-thumb.jpg',
+            'R' => 'assets/gallery/lawn-thumb.jpg',
+        ],
+        'reviews' => [],        // [{video_url, name, note}]
+        'legacy' => [],         // [{name, location, image, thumb}]
+        'social' => ['facebook' => '', 'instagram' => '', 'youtube' => '', 'linkedin' => '', 'x' => ''],
+        'blog_url' => '',
+        'main_site_url' => 'https://www.realmarkrealty.in',
+        'privacy_text' => '',
     ];
 }
 

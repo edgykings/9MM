@@ -50,8 +50,21 @@ function save_pdf_upload(array $file): string {
 function delete_upload(?string $path): void {
     if (!$path || !str_starts_with($path, 'uploads/')) return;
     $name = basename($path);
-    if (!preg_match('/^[a-z0-9-]+\.(jpg|pdf)$/', $name)) return;
+    if (!preg_match('/^[a-z0-9-]+\.(jpg|pdf|mp4)$/', $name)) return;
     @unlink(UPLOADS_DIR . "/$name");
+}
+
+/** Saves an uploaded MP4 teaser video. Returns 'uploads/x.mp4' or throws. */
+function save_video_upload(array $file): string {
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) throw new RuntimeException(upload_error($file['error'] ?? 4));
+    if ($file['size'] > 80 * 1024 * 1024) throw new RuntimeException('Video is larger than 80 MB. Export a shorter or more compressed version (about 10–20 MB is ideal for a website).');
+    $mime = (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
+    $head = (string)file_get_contents($file['tmp_name'], false, null, 4, 4);
+    if (!in_array($mime, ['video/mp4', 'video/quicktime', 'application/octet-stream'], true) || $head !== 'ftyp') throw new RuntimeException('Only MP4 videos can be uploaded here.');
+    $name = 'teaser-' . date('Ymd') . '-' . bin2hex(random_bytes(4)) . '.mp4';
+    if (!move_uploaded_file($file['tmp_name'], UPLOADS_DIR . "/$name")) throw new RuntimeException('Could not save the video.');
+    @chmod(UPLOADS_DIR . "/$name", 0644);
+    return "uploads/$name";
 }
 
 function upload_error(int $code): string {

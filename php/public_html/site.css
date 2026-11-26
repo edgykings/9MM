@@ -27,15 +27,23 @@ input:focus,select:focus,button:focus-visible,a:focus-visible,summary:focus-visi
 /* banner + header */
 .banner{display:block;background:#B48B2A;color:#fff;text-align:center;padding:10px 16px;font-size:15px;text-decoration:none}
 .banner:hover{color:#fff;background:#9C7720}
-header.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);border-bottom:1px solid #E4DCD8}
-header.top .in{max-width:1280px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 32px}
-header.top nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 28px;font-size:15px}
+header.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.97);border-bottom:1px solid #E4DCD8}
+header.top .in{max-width:1320px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px 28px}
+header.top nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 24px;font-size:15px;flex:1}
 header.top nav a{text-decoration:none}
-header.top nav a.cta{background:#1C3A50;color:#fff;padding:12px 22px;border-radius:999px;font-weight:500}
+header.top .right{display:flex;align-items:center;gap:12px}
+header.top .cta{background:#1C3A50;color:#fff;padding:11px 20px;border-radius:999px;font-weight:500;text-decoration:none;font-size:15px;white-space:nowrap}
+header.top .cta:hover{color:#fff;background:#14293a}
+.logo-rm img{height:28px;display:block}
+.logo-9 img{height:36px;display:block}
+.wa-top{width:44px;height:44px;border-radius:50%;background:#25D366;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.wa-top:hover{background:#1EBE57}
+.wa-top.off{background:#B9C9BF;cursor:help}
 
 /* hero */
 .hero{min-height:680px;display:flex;align-items:flex-end;color:#fff;background-image:linear-gradient(90deg,rgba(28,58,80,.92) 0%,rgba(28,58,80,.70) 38%,rgba(28,58,80,0) 70%),url(/assets/hero.jpg);background-size:cover;background-position:center}
-.hero .wrap{padding:96px 24px 72px;width:100%}
+.hero{position:relative;overflow:hidden}
+.hero .wrap{padding:96px 24px 72px;width:100%;position:relative;z-index:2}
 .hero .kicker{margin:0 0 20px;font-family:'Geologica',sans-serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#E9C977}
 .hero h1{margin:0;font-weight:200;font-size:clamp(56px,8vw,112px);line-height:.98;letter-spacing:-.02em}
 .hero .sub{margin:28px 0 0;max-width:520px;font-size:20px;font-weight:300;line-height:1.5}
@@ -167,8 +175,89 @@ footer strong{color:#2E3133}
 .lb-cap{margin:0;padding:10px 16px;font-size:14px}
 .lb-close{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.9);font-size:28px;line-height:1;cursor:pointer}
 
+@media (max-width:1100px){header.top nav{display:none}}
 @media (max-width:640px){
-  header.top nav a:not(.cta){display:none}
+  header.top .cta{display:none}
+  .logo-rm img{height:22px}.logo-9 img{height:30px}
   .hero{background-image:linear-gradient(180deg,rgba(28,58,80,.55) 0%,rgba(28,58,80,.92) 60%),url(/assets/hero.jpg)}
   .wrap{padding:72px 20px}
 }
+
+/* --- 26 Nov feedback round --- */
+/* cursor: the 9 Minnutes pin (tip of the pin is the click point) */
+html,body{cursor:url(/assets/cursor-9.png) 12 31,auto}
+a,button,summary,label,select,.zoom{cursor:url(/assets/cursor-9.png) 12 31,pointer}
+input,textarea{cursor:text}
+
+/* "Artist's impression" on every render */
+.aiw{position:relative;display:block}
+.aiw::after,.ai-label{content:"Artist's impression";position:absolute;right:10px;bottom:10px;background:rgba(20,30,40,.62);color:#fff;font-size:11px;letter-spacing:.02em;padding:3px 9px;border-radius:999px;pointer-events:none;z-index:3;font-family:'Outfit',system-ui,sans-serif}
+.ai-label{right:16px;bottom:16px}
+
+/* hero teaser video */
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero.has-video::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(28,58,80,.88) 0%,rgba(28,58,80,.6) 38%,rgba(28,58,80,0) 70%)}
+.video-toggle{position:absolute;left:16px;bottom:16px;z-index:3;background:rgba(20,30,40,.62);color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:8px 14px;font-size:13px}
+@media (prefers-reduced-motion:reduce){.hero-video{display:none}}
+
+/* NEAR images */
+.near .card{padding:0 0 32px;overflow:hidden}
+.near .card>*:not(.aiw){margin-left:28px;margin-right:28px}
+.near .near-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.near .letter{margin-top:-36px;position:relative;z-index:4;border:4px solid #fff}
+
+/* residences: cards open their floor plans below */
+button.home{font:inherit;color:inherit;text-align:left;background:#fff;width:100%;cursor:inherit;transition:border-color .2s,box-shadow .2s}
+button.home:hover{border-color:#B48B2A}
+button.home[aria-expanded="true"]{border-color:#1C3A50;box-shadow:0 0 0 2px #1C3A50 inset;background:#F7F4F2}
+.open-plans{margin-top:10px;display:inline-flex;align-items:center;gap:6px;color:#1C3A50;font-weight:500;font-size:15px}
+.open-plans .when-open{display:none}
+button.home[aria-expanded="true"] .when-open{display:inline}
+button.home[aria-expanded="true"] .when-closed{display:none}
+button.home[aria-expanded="true"] .open-plans svg{transform:rotate(180deg)}
+.plans-panel{grid-column:1/-1;background:#EBE3E0;padding:28px;border-radius:4px}
+.plans-panel:focus{outline:none}
+.pp-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
+.pp-title{margin:0;font-size:22px;font-weight:400;color:#1C3A50}
+.pp-close{background:#fff;border:1px solid #1C3A50;color:#1C3A50;border-radius:999px;padding:8px 18px;min-height:40px}
+
+/* amenity icons */
+.amen-icons{list-style:none;margin:0 0 48px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:20px}
+.amen-icons li{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;font-size:15px;padding:18px 8px;border:1px solid #E4DCD8}
+
+/* reviews */
+.reviews{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));margin-top:32px}
+.review{margin:0}
+.yt{position:relative;display:block;width:100%;aspect-ratio:16/9;border:0;padding:0;background:#0d1a24;overflow:hidden}
+.yt img{width:100%;height:100%;object-fit:cover;display:block;opacity:.9}
+.yt .play{position:absolute;left:50%;top:50%;width:68px;height:48px;margin:-24px 0 0 -34px;background:#B48B2A;border-radius:12px}
+.yt .play::after{content:"";position:absolute;left:28px;top:14px;border-style:solid;border-width:10px 0 10px 16px;border-color:transparent transparent transparent #fff}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.review figcaption{margin-top:10px;display:flex;flex-direction:column;gap:2px}
+.review figcaption span{opacity:.8;font-size:14px}
+.review-empty,.legacy-empty{aspect-ratio:16/9;border:1px dashed rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);font-size:15px}
+
+/* brand legacy */
+.legacy{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));margin-top:32px}
+.legacy figure{margin:0}
+.legacy img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.legacy figcaption{margin-top:10px;display:flex;flex-direction:column}
+.legacy figcaption strong{font-weight:500;color:#1C3A50;font-size:18px}
+.legacy figcaption span{font-size:14px;color:#58595B}
+.legacy-empty{aspect-ratio:4/3;border-color:#C4B4A4;color:#8A7F76}
+
+/* footer: get in touch */
+.foot-h{margin:0 0 28px;font-size:28px;font-weight:300;color:#1C3A50}
+footer .cols>div{flex:1 1 220px}
+footer a{color:#1C3A50}
+.foot-logo{height:24px;display:block;margin-bottom:10px}
+.foot-links{list-style:none;margin:6px 0 0;padding:0;line-height:2}
+.social{display:flex;gap:10px;margin-top:10px}
+.social a{width:44px;height:44px;border-radius:50%;border:1px solid #C4B4A4;display:inline-flex;align-items:center;justify-content:center;color:#1C3A50}
+.social a:hover{background:#1C3A50;color:#fff;border-color:#1C3A50}
+footer .rera{margin:24px 0 8px;font-size:13px}
+footer .disc{margin:0;font-size:12px;line-height:1.6}
+
+/* legal pages */
+.legal h2{font-size:22px;font-weight:500;color:#1C3A50;margin:32px 0 8px}
+.legal p,.legal li{font-size:16px;font-weight:300;line-height:1.7}

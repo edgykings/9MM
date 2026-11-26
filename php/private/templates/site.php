@@ -1,8 +1,7 @@
 <?php
 /** @var array $c content, @var array $s settings */
-$todo = fn(string $t) => $s['show_todo_tags'] ? '<span class="todo">[' . e($t) . ']</span>' : '';
-$t = $s['tracking'];
-$gtm = valid_gtm($t['gtm_id'] ?? ''); $pixel = valid_pixel($t['meta_pixel_id'] ?? ''); $ga4 = valid_ga4($t['ga4_id'] ?? '');
+require __DIR__ . '/partials.php';
+$todo = fn(string $t) => todo_tag($s, $t);
 $yt = youtube_id($c['video_url']);
 $wa = preg_replace('/\D/', '', (string)$c['whatsapp']);
 $telHref = 'tel:' . preg_replace('/[^\d+]/', '', $c['phone']);
@@ -18,6 +17,16 @@ $amen = [
   'Games & sports' => ['Fitness studio', 'Multipurpose court', 'Table tennis', 'Jogging track', 'Kids’ play area', 'Yoga lawn', 'Acupressure walkway', 'Pool table', 'Chess, carrom & darts', 'Foosball', 'Air hockey', 'Toddlers’ playroom', 'Arcade gaming zone'],
   'Facilities & amenities' => ['Swimming pool with speakers', 'Banquet hall', 'Kids’ pool', 'Party lawn', 'Festival zone', 'Flower & vertical garden', 'Manicured garden', 'Pet-friendly zone', 'BBQ zone', 'Mandir at rooftop', 'Senior citizens’ zone', 'Adda zone', 'Feature wall', 'Outdoor seating', 'Sunken seating'],
   'Infrastructure' => ['Reception lobby', 'CCTV surveillance', 'Intercom', 'Solar panels', 'Water treatment plant', 'Rainwater harvesting', 'Recycled water for gardening & flushing', 'Boundary plantation', 'Wheelchair access ramp', 'Boom barrier at entry', 'Fire door at fire-escape staircase', 'Solar-powered lights in common areas', 'High-speed elevators up to roof', 'Wastewater recycling', 'Sewage treatment plant'],
+];
+$amenIcons = [
+  ['Swimming pool', '<path d="M6 34c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2 3-2 6-2 3 2 6 2"/><path d="M6 41c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2 3-2 6-2 3 2 6 2"/><path d="M16 28V12a4 4 0 0 1 8 0M30 28V12a4 4 0 0 1 8 0M16 18h14M16 24h14"/>'],
+  ['Fitness studio', '<path d="M8 20v8M13 16v16M35 16v16M40 20v8M13 24h22"/>'],
+  ['Banquet hall', '<path d="M18 8h12l-1 10a5 5 0 0 1-10 0L18 8Z"/><path d="M24 23v14M17 40h14"/>'],
+  ['Kids’ play area', '<circle cx="15" cy="12" r="4"/><path d="M15 16v10l-5 12M15 26l5 12M8 22h14"/><path d="M30 40V18l10 22M30 18h6"/>'],
+  ['Jogging track', '<circle cx="29" cy="9" r="4"/><path d="M14 40l6-10 6 4 2-12-8 2-5 6M28 22l6 6 6-2"/>'],
+  ['Yoga lawn', '<circle cx="24" cy="10" r="4"/><path d="M24 14v12M12 24l12 2 12-2M14 38c4-5 7-8 10-8s6 3 10 8"/>'],
+  ['Lifestyle club', '<path d="M6 40h36M10 40V20l14-10 14 10v20M20 40V28h8v12"/>'],
+  ['CCTV & security', '<path d="M24 6l14 5v10c0 10-6 17-14 21-8-4-14-11-14-21V11l14-5Z"/><path d="M18 24l4 4 8-8"/>'],
 ];
 $conn = [['Joka Metro', '0.7'], ['Thakurpukur Metro', '2.4'], ['Behala Chowrasta', '6.3'], ['Taratala Crossing / Metro', '7.3'], ['Majerhat', '8.6'], ['Tollygunge Metro', '8.6'], ['Alipore', '10.0'], ['Park Street', '13.8'], ['BBD Bag', '15.7'], ['Sealdah Station', '17.5'], ['Howrah Station', '18.9'], ['Salt Lake', '22.7'], ['New Town (Biswa Bangla Gate)', '29.4'], ['Airport', '32.0']];
 $nearby = [
@@ -50,55 +59,23 @@ $planLabel = function (array $p): string {
     for ($i = 2; $i < count($parts); $i++) $parts[$i] = ucwords(strtolower($parts[$i]));
     return implode(' · ', $parts);
 };
-?><!doctype html>
-<html lang="en-IN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>9 Minnutes, Joka – 2, 3 &amp; 4 BHK homes a 9-minute walk from Joka Metro | Realmark</title>
-<meta name="description" content="9 Minnutes by Realmark: 2, 3 &amp; 4 BHK residences on Hanspukur Green Park Road, Joka, a 9-minute walk from Joka Metro. Register for launch priority.">
-<meta property="og:title" content="9 Minnutes, Joka – Joka's most walkable address">
-<meta property="og:description" content="2, 3 &amp; 4 BHK residences a 9-minute walk from Joka Metro. Register for launch priority.">
-<meta property="og:image" content="/assets/hero.jpg">
-<meta property="og:type" content="website">
-<link rel="icon" href="/assets/logo-9minnutes.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&amp;family=Geologica:wght@400;500&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/site.css?v=<?= @filemtime(PUBLIC_DIR . '/site.css') ?>">
-<?php if ($gtm): ?>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','<?= $gtm ?>');</script>
-<?php endif; ?>
-<?php if ($ga4): ?>
-<script async src="https://www.googletagmanager.com/gtag/js?id=<?= $ga4 ?>"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','<?= $ga4 ?>');</script>
-<?php endif; ?>
-<?php if ($pixel): ?>
-<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','<?= $pixel ?>');fbq('track','PageView');</script>
-<?php endif; ?>
-</head>
-<body>
-<?php if ($gtm): ?><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?= $gtm ?>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><?php endif; ?>
+?><?php render_head($c, $s, '9 Minnutes, Joka – 2, 3 & 4 BHK homes a 9-minute walk from Joka Metro | Realmark', '9 Minnutes by Realmark: 2, 3 & 4 BHK residences on Hanspukur Green Park Road, Joka, a 9-minute walk from Joka Metro. Register for launch priority.'); ?>
+<?php render_header($c, $s); ?>
 
-<?php if ($s['banner_on'] && trim($c['banner_text']) !== ''): ?>
-<a class="banner" href="<?= e($c['banner_link'] ?: '#register') ?>"><?= e($c['banner_text']) ?></a>
+<section id="top" class="hero<?= $c['hero_video'] ? ' has-video' : '' ?>">
+<?php if ($c['hero_video']): ?>
+<video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="/assets/hero.jpg" aria-hidden="true"><source src="<?= e(media_url($c['hero_video'])) ?>" type="video/mp4"></video>
+<button type="button" class="video-toggle" aria-pressed="false" aria-label="Pause background video">Pause</button>
 <?php endif; ?>
-
-<header class="top"><div class="in">
-<a href="#top" aria-label="9 Minnutes home"><img src="/assets/logo-9minnutes.svg" alt="9 Minnutes" style="height:34px;display:block"></a>
-<nav aria-label="Sections">
-<a href="#near">NEAR</a><a href="#residences">Residences</a><a href="#plans">Floor plans</a><a href="#amenities">Amenities</a><a href="#gallery">Gallery</a><a href="#masterplan">Master plan</a><a href="#location">Location</a><a href="#faq">FAQ</a>
-<a href="#register" class="cta">Register interest</a>
-</nav>
-</div></header>
-
-<section id="top" class="hero"><div class="wrap">
+<div class="wrap">
 <p class="kicker"><?= e($c['hero_eyebrow']) ?></p>
 <h1><?= nl($c['hero_title']) ?></h1>
 <p class="sub"><?= e($c['hero_subtitle']) ?></p>
 <div class="ctas"><a href="#register" class="btn btn-gold">Register for launch priority</a><a href="#near" class="btn btn-line">Explore the project</a></div>
-<p style="margin:28px 0 0;font-size:12px;opacity:.75">Artist's impression.</p>
-</div></section>
+<?php if (!$c['hero_video'] && $s['show_todo_tags']): ?><p style="margin:24px 0 0"><?= $todo('TEASER VIDEO: upload in admin → Images & files') ?></p><?php endif; ?>
+</div>
+<span class="ai-label">Artist's impression</span>
+</section>
 
 <section aria-label="Key facts" class="facts"><div class="in">
 <?php foreach ($c['facts'] as $f): ?><div><div class="v"><?= e($f['value']) ?></div><div class="l"><?= e($f['label']) ?></div></div><?php endforeach; ?>
@@ -109,7 +86,7 @@ $planLabel = function (array $p): string {
 <p style="font-size:20px;font-weight:300;line-height:1.55">Not simply because the Metro is near. But because everything that matters is. NEAR isn't about distance. It's about removing distance from what matters.</p></div>
 <div class="grid near">
 <?php foreach ($near as [$l, $h, $tag, $p]): ?>
-<div class="card"><div class="letter"><?= $l ?></div><h3><?= e($h) ?></h3><p class="tag"><?= e($tag) ?></p><p><?= e($p) ?></p></div>
+<div class="card"><?php if (!empty($c['near_images'][$l])): ?><?= ai('<img class="near-img" src="' . e(media_url($c['near_images'][$l])) . '" alt="" loading="lazy">') ?><?php endif; ?><div class="letter"><?= $l ?></div><h3><?= e($h) ?></h3><p class="tag"><?= e($tag) ?></p><p><?= e($p) ?></p></div>
 <?php endforeach; ?>
 </div></div></section>
 
@@ -120,48 +97,47 @@ $planLabel = function (array $p): string {
 <div class="times"><?php foreach ($metro as [$p, $m]): ?><div><div style="font-size:16px"><?= e($p) ?></div><div class="m"><?= $m ?> <span style="font-size:15px">mins</span></div></div><?php endforeach; ?></div>
 <p style="margin:28px 0 0;font-size:13px;line-height:1.5;opacity:.85"><?= $c['metro_note'] !== '' ? e($c['metro_note']) : 'Indicative travel times. ' . $todo('CONFIRM Metro wording with legal') ?></p>
 </div>
-<img src="/assets/metro-tower.jpg" alt="Artist's impression of the 9 Minnutes tower beside the Joka Metro line">
+<?= ai('<img src="/assets/metro-tower.jpg" alt="The 9 Minnutes tower beside the Joka Metro line">') ?>
 </div></section>
 
 <section id="residences"><div class="wrap">
 <p class="eyebrow">Residences</p>
 <h2 class="h2">A home for every chapter of life.</h2>
-<p class="lead" style="margin-bottom:56px"><?= $c['three_sides_open'] !== '' ? e($c['three_sides_open']) : $todo('CONFIRM: "Every residence, three sides open"') ?></p>
-<div class="grid homes">
-<?php foreach ($c['homes'] as $h): $sold = !empty($s['sold_out'][$h['tier']]); ?>
-<div class="home">
+<p class="lead" style="margin-bottom:8px">Choose a residence type to see its floor plans.</p>
+<p class="lead" style="margin-bottom:24px"><?= $c['three_sides_open'] !== '' ? e($c['three_sides_open']) : $todo('CONFIRM: "Every residence, three sides open"') ?></p>
+<div class="grid homes" id="homes">
+<?php foreach ($c['homes'] as $h): $sold = !empty($s['sold_out'][$h['tier']]); $n = count(array_filter($c['plans'], fn($p) => $p['tier'] === $h['tier'])); ?>
+<button type="button" class="home" data-tier="<?= e($h['tier']) ?>" aria-expanded="false" aria-controls="plans-panel">
 <?php if ($sold): ?><span class="soldout">Sold out</span><?php endif; ?>
-<div class="tier"><?= e($h['label']) ?></div>
-<div class="bhk"><?= e($h['bhk']) ?></div>
-<div class="desc"><?= e($h['desc']) ?></div>
-<div class="line"><?= e($h['line']) ?></div>
-<div class="area">Carpet area<br><strong><?= e($h['carpet']) ?></strong> sq. ft.</div>
-<?php if ($s['show_prices'] && trim($h['price']) !== ''): ?><div class="price"><?= e($h['price']) ?></div><?php endif; ?>
-</div>
+<span class="tier"><?= e($h['label']) ?></span>
+<span class="bhk"><?= e($h['bhk']) ?></span>
+<span class="desc"><?= e($h['desc']) ?></span>
+<span class="line"><?= e($h['line']) ?></span>
+<span class="area">Carpet area<br><strong><?= e($h['carpet']) ?></strong> sq. ft.</span>
+<?php if ($s['show_prices'] && trim($h['price']) !== ''): ?><span class="price"><?= e($h['price']) ?></span><?php endif; ?>
+<span class="open-plans"><span class="when-closed">View <?= $n ?> floor plan<?= $n === 1 ? '' : 's' ?></span><span class="when-open">Hide floor plans</span> <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+</button>
 <?php endforeach; ?>
+<div class="plans-panel" id="plans-panel" role="region" aria-label="Floor plans" hidden tabindex="-1">
+<div class="pp-head"><h3 class="pp-title">Floor plans</h3><button type="button" class="pp-close">Close</button></div>
+<div class="grid plans"></div>
+<p class="small" style="margin:16px 0 0">Plans are indicative and not to scale. Carpet area as per RERA. Tap a plan to see it in full.</p>
 </div>
-<p style="margin:28px 0 0;font-size:15px;font-weight:300">
-<?php if ($s['show_prices']): ?><?= e($c['price_note']) ?> <?php else: ?>Prices will be announced at launch. Registered buyers hear first. <?php endif; ?>
-<a href="#plans">See all floor plans</a> · <a href="#register">Register now</a></p>
-</div></section>
-
-<section id="plans" class="blush"><div class="wrap">
-<p class="eyebrow">Floor plans</p>
-<h2 class="h2">Find the plan that fits.</h2>
-<p class="lead"><?= count($c['plans']) ?> layouts across four residence types. Tap a plan to see it in full.</p>
-<div class="plan-tabs" role="group" aria-label="Residence type">
-<?php $first = true; foreach ($tiers as $k => $label): ?><button type="button" class="plan-tab" data-tier="<?= e($k) ?>" aria-pressed="<?= $first ? 'true' : 'false' ?>"><?= e($label) ?><?= !empty($s['sold_out'][$k]) ? ' (sold out)' : '' ?></button><?php $first = false; endforeach; ?>
 </div>
-<div class="grid plans">
-<?php foreach ($c['plans'] as $p): $alt = "Floor plan, flat {$p['flat']}, {$p['config']}, {$p['floors']}"; ?>
-<figure class="plan" data-tier="<?= e($p['tier']) ?>">
+<?php foreach ($c['homes'] as $h): ?>
+<template id="plans-<?= e($h['tier']) ?>" data-title="<?= e($h['label'] . ' · ' . $h['bhk'] . ' floor plans') ?>">
+<?php foreach ($c['plans'] as $p): if ($p['tier'] !== $h['tier']) continue; $alt = "Floor plan, flat {$p['flat']}, {$p['config']}, {$p['floors']}"; ?>
+<figure class="plan">
 <a href="<?= e(media_url($p['image'])) ?>" class="zoom" data-caption="<?= e($alt) ?>" aria-label="Enlarge <?= e($alt) ?>"><img src="<?= e(media_url($p['thumb'] ?: $p['image'])) ?>" alt="<?= e($alt) ?>" loading="lazy" width="720" height="498"></a>
-<figcaption><div class="t"><?= e(ucfirst(strtolower($p['tier']))) ?> · Flat <?= e($p['flat']) ?></div><div class="c"><?= e($planLabel($p)) ?></div><div class="f"><?= e($p['floors']) ?></div>
+<figcaption><div class="t">Flat <?= e($p['flat']) ?></div><div class="c"><?= e($planLabel($p)) ?></div><div class="f"><?= e($p['floors']) ?></div>
 <div class="a">Carpet area <strong><?= e($p['carpet']) ?> sq. ft.</strong></div><?php if ($p['terrace'] !== ''): ?><div class="f">Open terrace <?= e($p['terrace']) ?> sq. ft.</div><?php endif; ?></figcaption>
 </figure>
 <?php endforeach; ?>
-</div>
-<p class="small" style="margin:24px 0 0">Plans are indicative and not to scale. Carpet area as per RERA.</p>
+</template>
+<?php endforeach; ?>
+<p style="margin:28px 0 0;font-size:15px;font-weight:300">
+<?php if ($s['show_prices']): ?><?= e($c['price_note']) ?> <?php else: ?>Prices will be announced at launch. Registered buyers hear first. <?php endif; ?>
+<a href="#register">Register now</a></p>
 </div></section>
 
 <section id="specifications"><div class="wrap">
@@ -172,7 +148,7 @@ $planLabel = function (array $p): string {
 </div></section>
 
 <section class="terrace blush"><div class="wrap">
-<figure><img src="/assets/terrace.jpg" alt="Artist's impression of a terrace apartment at sunset" loading="lazy"><figcaption class="small" style="margin-top:8px">Artist's impression.</figcaption></figure>
+<figure><?= ai('<img src="/assets/terrace.jpg" alt="A terrace apartment at sunset" loading="lazy">') ?></figure>
 <div class="col"><p class="eyebrow">Terrace apartments</p><h2 class="h2" style="font-size:clamp(32px,3.8vw,48px)">Your own piece of sky.</h2>
 <p style="margin:0;font-size:18px;font-weight:300;line-height:1.65"><?= e($c['terrace_text']) ?></p></div>
 </div></section>
@@ -180,11 +156,15 @@ $planLabel = function (array $p): string {
 <section id="amenities"><div class="wrap">
 <div class="split" style="margin-bottom:48px"><div><p class="eyebrow">Amenities</p><h2 class="h2">More to life.<br>Right at home.</h2></div>
 <p style="font-size:18px;font-weight:300;line-height:1.6">A 16,400 sq. ft. lifestyle club, rooftop amenities and <?= $c['amenities_count'] !== '' ? e($c['amenities_count']) . ' facilities and amenities' : 'a long list of facilities ' . $todo('CONFIRM amenity count: 45 or 48') ?>, shared by just 127 families.</p></div>
+<ul class="amen-icons" aria-label="Signature amenities">
+<?php foreach ($amenIcons as [$label, $svg]): ?><li><svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true" fill="none" stroke="#B48B2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><?= $svg ?></svg><span><?= e($label) ?></span></li><?php endforeach; ?>
+</ul>
+<?php if ($s['show_todo_tags']): ?><p style="margin:-24px 0 40px"><?= $todo('ICON LIST: final amenities to feature, from Realmark') ?></p><?php endif; ?>
 <div class="grid photos">
-<figure><img src="/assets/pool.jpg" alt="Swimming pool" loading="lazy"><figcaption>Swimming pool</figcaption></figure>
-<figure><img src="/assets/gym.jpg" alt="Fitness studio" loading="lazy"><figcaption>Fitness studio</figcaption></figure>
-<figure><img src="/assets/lawn.jpg" alt="Landscaped lawn" loading="lazy"><figcaption>Festival lawn</figcaption></figure>
-<figure><img src="/assets/banquet.jpg" alt="Banquet setting" loading="lazy"><figcaption>Banquet</figcaption></figure>
+<figure><?= ai('<img src="/assets/pool.jpg" alt="Swimming pool" loading="lazy">') ?><figcaption>Swimming pool</figcaption></figure>
+<figure><?= ai('<img src="/assets/gym.jpg" alt="Fitness studio" loading="lazy">') ?><figcaption>Fitness studio</figcaption></figure>
+<figure><?= ai('<img src="/assets/lawn.jpg" alt="Landscaped lawn" loading="lazy">') ?><figcaption>Festival lawn</figcaption></figure>
+<figure><?= ai('<img src="/assets/banquet.jpg" alt="Banquet setting" loading="lazy">') ?><figcaption>Banquet</figcaption></figure>
 </div>
 <div class="grid lists"><?php foreach ($amen as $h => $items): ?><div><h3><?= e($h) ?></h3><ul><?php foreach ($items as $i): ?><li><?= e($i) ?></li><?php endforeach; ?></ul></div><?php endforeach; ?></div>
 <p class="small" style="margin:24px 0 0">Images are artist's impressions.</p>
@@ -195,7 +175,7 @@ $planLabel = function (array $p): string {
 <h2 class="h2">A look around.</h2>
 <div class="grid gallery" style="margin-top:32px">
 <?php foreach ($c['gallery'] as $g): ?>
-<a href="<?= e(media_url($g['image'])) ?>" class="zoom" data-caption="<?= e($g['caption']) ?> (artist's impression)"><img src="<?= e(media_url($g['thumb'] ?: $g['image'])) ?>" alt="<?= e($g['caption']) ?>, artist's impression" loading="lazy"></a>
+<a href="<?= e(media_url($g['image'])) ?>" class="zoom aiw" data-caption="<?= e($g['caption']) ?> (artist's impression)"><img src="<?= e(media_url($g['thumb'] ?: $g['image'])) ?>" alt="<?= e($g['caption']) ?>, artist's impression" loading="lazy"></a>
 <?php endforeach; ?>
 </div>
 <?php if ($yt): ?>
@@ -210,7 +190,7 @@ $planLabel = function (array $p): string {
 <p class="eyebrow">Master plan</p>
 <h2 class="h2">A thoughtfully planned community.</h2>
 <p class="lead">One G+11 tower with landscaped spaces to relax, play, celebrate and connect, on Hanspukur Green Park Road.</p>
-<a href="<?= e(media_url($c['masterplan'])) ?>" class="zoom" data-caption="Master plan (artist's impression)" style="display:block"><img src="<?= e(media_url($c['masterplan'])) ?>" alt="Master plan of 9 Minnutes showing the tower, landscaped areas, pool and amenities" loading="lazy" style="width:100%;height:auto;display:block;border:1px solid #E4DCD8"></a>
+<a href="<?= e(media_url($c['masterplan'])) ?>" class="zoom aiw" data-caption="Master plan (artist's impression)" style="display:block"><img src="<?= e(media_url($c['masterplan'])) ?>" alt="Master plan of 9 Minnutes showing the tower, landscaped areas, pool and amenities" loading="lazy" style="width:100%;height:auto;display:block;border:1px solid #E4DCD8"></a>
 <?php if (!$c['masterplan_final']): ?><p style="margin:12px 0 0;font-size:13px"><?= $todo('REPLACE: cleaned-up master plan from the designer') ?></p><?php endif; ?>
 </div></section>
 
@@ -225,12 +205,31 @@ $planLabel = function (array $p): string {
 </tbody></table></div>
 <div class="near-lists">
 <?php foreach ($nearby as $h => $rows): ?><div><h3><?= e($h) ?></h3><?php foreach ($rows as [$p, $k]): ?><div class="row"><span><?= e($p) ?></span><span><?= $k ?> km</span></div><?php endforeach; ?></div><?php endforeach; ?>
-<img src="/assets/aerial.jpg" alt="Aerial artist's impression of 9 Minnutes among greenery near the Metro" loading="lazy" style="grid-column:1/-1;width:100%;aspect-ratio:21/9;object-fit:cover;display:block">
+<span class="aiw" style="grid-column:1/-1"><img src="/assets/aerial.jpg" alt="Aerial view of 9 Minnutes among greenery near the Metro" loading="lazy" style="width:100%;aspect-ratio:21/9;object-fit:cover;display:block"></span>
 </div>
 </div>
 <div class="map"><iframe title="Map showing 9 Minnutes, <?= e($c['site_address']) ?>" src="https://maps.google.com/maps?q=<?= rawurlencode($c['map_query']) ?>&amp;z=15&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 <p style="margin:10px 0 0;font-size:14px"><a href="https://maps.google.com/?q=<?= rawurlencode($c['map_query']) ?>" target="_blank" rel="noopener">Open in Google Maps</a></p></div>
 </div></section>
+
+<?php if ($c['reviews'] || $s['show_todo_tags']): ?>
+<section id="reviews" class="navy"><div class="wrap">
+<p class="eyebrow" style="color:#E9C977">Customer reviews</p>
+<h2 class="h2">In our homeowners' words.</h2>
+<?php $revs = array_values(array_filter($c['reviews'], fn($r) => youtube_id($r['video_url'] ?? ''))); ?>
+<?php if ($revs): ?>
+<div class="grid reviews">
+<?php foreach ($revs as $r): $id = youtube_id($r['video_url']); ?>
+<figure class="review"><button type="button" class="yt" data-yt="<?= e($id) ?>" aria-label="Play video review by <?= e($r['name']) ?>"><img src="https://i.ytimg.com/vi/<?= e($id) ?>/hqdefault.jpg" alt="" loading="lazy"><span class="play" aria-hidden="true"></span></button>
+<figcaption><strong><?= e($r['name']) ?></strong><?php if (!empty($r['note'])): ?><span><?= e($r['note']) ?></span><?php endif; ?></figcaption></figure>
+<?php endforeach; ?>
+</div>
+<?php else: ?>
+<div class="grid reviews"><?php for ($i = 0; $i < 3; $i++): ?><div class="review-empty">Video review</div><?php endfor; ?></div>
+<p style="margin:16px 0 0"><?= $todo('ADD REVIEW VIDEOS in admin → Images & files (YouTube links)') ?></p>
+<?php endif; ?>
+</div></section>
+<?php endif; ?>
 
 <section id="team"><div class="wrap">
 <p class="eyebrow">The team</p>
@@ -247,6 +246,23 @@ $planLabel = function (array $p): string {
 <?php endforeach; ?>
 </div>
 </div></section>
+
+<?php if ($c['legacy'] || $s['show_todo_tags']): ?>
+<section id="legacy"><div class="wrap">
+<p class="eyebrow">Brand Legacy</p>
+<h2 class="h2">Homes Realmark has built.</h2>
+<?php if ($c['legacy']): ?>
+<div class="grid legacy">
+<?php foreach ($c['legacy'] as $p): ?>
+<figure><?= ai('<img src="' . e(media_url($p['thumb'] ?: $p['image'])) . '" alt="' . e($p['name']) . '" loading="lazy">') ?><figcaption><strong><?= e($p['name']) ?></strong><?php if (!empty($p['location'])): ?><span><?= e($p['location']) ?></span><?php endif; ?></figcaption></figure>
+<?php endforeach; ?>
+</div>
+<?php else: ?>
+<div class="grid legacy"><?php for ($i = 0; $i < 4; $i++): ?><figure><div class="legacy-empty">Project photo</div><figcaption><strong>Project name</strong></figcaption></figure><?php endfor; ?></div>
+<p style="margin:16px 0 0"><?= $todo('ADD PREVIOUS PROJECTS (name + photo) in admin → Images & files') ?></p>
+<?php endif; ?>
+</div></section>
+<?php endif; ?>
 
 <section id="register" class="register navy"><div class="wrap">
 <div class="col">
@@ -280,19 +296,7 @@ $planLabel = function (array $p): string {
 </div>
 </div></section>
 
-<footer><div class="in">
-<div class="cols">
-<div><img src="/assets/logo-9minnutes.svg" alt="9 Minnutes" style="height:38px;display:block;margin-bottom:12px"><div style="font-family:'Geologica',sans-serif">Joka's most walkable address</div></div>
-<div><strong>Site office</strong><br><?= e($c['site_address']) ?><br><?= e($c['phone']) ?> · <?= e($c['email']) ?></div>
-<div><img src="/assets/logo-realmark.svg" alt="Realmark" style="height:30px;display:block;margin-bottom:10px"><strong>A development by Realmark</strong><br><?= e($c['developer_address']) ?><br><?= e($c['developer_phone']) ?> · www.realmarkrealty.in</div>
-</div>
-<p style="margin:24px 0 8px;font-size:13px">WBRERA No. <?= $c['rera_number'] !== '' ? e($c['rera_number']) : $todo('ADD RERA REGISTRATION NUMBER') ?> · rera.wb.gov.in</p>
-<p style="margin:0;font-size:12px;line-height:1.6"><?= $c['disclaimer'] !== '' ? nl($c['disclaimer']) : 'Disclaimer: ' . $todo('ADD LEGAL-APPROVED DISCLAIMER') . ' Images are artist\'s impressions. Specifications, areas and amenities are indicative and subject to change.' ?></p>
-</div></footer>
-
-<?php if ($wa !== ''): ?>
-<a href="https://wa.me/<?= e($wa) ?>?text=<?= rawurlencode("Hi, I'm interested in 9 Minnutes, Joka.") ?>" class="wa" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg></a>
-<?php endif; ?>
+<?php render_footer($c, $s); ?>
 <dialog id="lightbox" aria-label="Enlarged image"><button type="button" class="lb-close" aria-label="Close">×</button><img alt=""><p class="lb-cap"></p></dialog>
 <script src="/app.js?v=<?= @filemtime(PUBLIC_DIR . '/app.js') ?>" defer></script>
 </body>

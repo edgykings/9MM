@@ -9,7 +9,7 @@ header('X-Robots-Tag: noindex, nofollow');
 header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: same-origin');
-header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.ytimg.com; media-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
 header('Cache-Control: no-store');
 
 admin_session_start();
@@ -143,7 +143,8 @@ if ($isPost) {
                 foreach (['hero_eyebrow' => 120, 'hero_title' => 120, 'hero_subtitle' => 300, 'metro_note' => 300, 'three_sides_open' => 200,
                           'price_note' => 300, 'terrace_text' => 800, 'amenities_count' => 10, 'phone' => 30, 'email' => 120, 'whatsapp' => 20,
                           'site_address' => 200, 'map_query' => 200, 'developer_address' => 250, 'developer_phone' => 30,
-                          'rera_number' => 80, 'disclaimer' => 2000, 'banner_text' => 160, 'banner_link' => 300] as $k => $max) {
+                          'rera_number' => 80, 'disclaimer' => 8000, 'banner_text' => 160, 'banner_link' => 300,
+                          'blog_url' => 300, 'main_site_url' => 300, 'privacy_text' => 30000] as $k => $max) {
                     $new[$k] = str_in($k, $max);
                 }
                 // Save everything that is valid; skip (and report) only the fields that are not.
@@ -152,6 +153,16 @@ if ($isPost) {
                 $new['whatsapp'] = preg_replace('/\D/', '', $new['whatsapp']);
                 if ($new['whatsapp'] !== '' && !preg_match('/^91[6-9]\d{9}$/', $new['whatsapp'])) { unset($new['whatsapp']); $warn[] = 'WhatsApp number must be 91 followed by the 10-digit mobile, e.g. 919836780001'; }
                 if ($new['banner_link'] !== '' && !preg_match('~^(#[\w-]+|https://\S+)$~', $new['banner_link'])) { unset($new['banner_link']); $warn[] = 'the banner link must start with # or https://'; }
+                foreach (['blog_url' => 'Blog link', 'main_site_url' => 'Main website link'] as $k => $label) {
+                    if ($new[$k] !== '' && !preg_match('~^https://\S+$~', $new[$k])) { unset($new[$k]); $warn[] = "$label must start with https://"; }
+                }
+                $social = [];
+                foreach (['facebook', 'instagram', 'youtube', 'linkedin', 'x'] as $k) {
+                    $u = mb_substr(trim((string)($_POST['social'][$k] ?? '')), 0, 300);
+                    if ($u !== '' && !preg_match('~^https://\S+$~', $u)) { $warn[] = ucfirst($k) . ' link must start with https://'; $u = content()['social'][$k] ?? ''; }
+                    $social[$k] = $u;
+                }
+                $new['social'] = $social;
                 $new['facts'] = [];
                 foreach ($c['facts'] as $i => $f) $new['facts'][] = ['value' => mb_substr(trim($_POST['facts'][$i]['value'] ?? ''), 0, 20), 'label' => mb_substr(trim($_POST['facts'][$i]['label'] ?? ''), 0, 80)];
                 $new['homes'] = [];
@@ -227,6 +238,66 @@ if ($isPost) {
                 save_content(['brochure' => $pdf]);
                 flash('Brochure uploaded. Visitors can download it after registering.'); go('media', '#brochure');
 
+            case 'hero_video':
+                if (!empty($_POST['remove'])) { delete_upload(content()['hero_video']); save_content(['hero_video' => '']); flash('Teaser video removed. The hero image shows instead.'); go('media', '#hero-video'); }
+                $mp4 = save_video_upload($_FILES['file'] ?? []);
+                delete_upload(content()['hero_video']);
+                save_content(['hero_video' => $mp4]);
+                flash('Teaser video uploaded. It now plays at the top of the site.'); go('media', '#hero-video');
+
+            case 'near_image':
+                $l = (string)($_POST['letter'] ?? '');
+                if (!in_array($l, ['N', 'E', 'A', 'R'], true)) throw new RuntimeException('Unknown letter.');
+                $img = save_image_upload($_FILES['file'] ?? [], 1200, 800);
+                $near = content()['near_images'];
+                delete_upload($near[$l] ?? null); delete_upload($img['image']);
+                $near[$l] = $img['thumb'];
+                save_content(['near_images' => $near]);
+                flash("Image for $l updated."); go('media', '#near-images');
+
+            case 'review_add':
+                $url = str_in('video_url', 300);
+                if (!youtube_id($url)) throw new RuntimeException('Paste a YouTube link for the review video.');
+                $r = content()['reviews'];
+                $r[] = ['video_url' => $url, 'name' => str_in('name', 80) ?: 'Realmark homeowner', 'note' => str_in('note', 120)];
+                save_content(['reviews' => $r]);
+                flash('Review added.'); go('media', '#reviews');
+            case 'reviews_save':
+                $out = [];
+                foreach (content()['reviews'] as $i => $r) {
+                    $in = $_POST['r'][$i] ?? [];
+                    if (!empty($in['delete'])) continue;
+                    $r['name'] = mb_substr(trim($in['name'] ?? $r['name']), 0, 80);
+                    $r['note'] = mb_substr(trim($in['note'] ?? $r['note']), 0, 120);
+                    $r['order'] = (int)($in['order'] ?? $i);
+                    $out[] = $r;
+                }
+                usort($out, fn($a, $b) => $a['order'] <=> $b['order']);
+                save_content(['reviews' => array_map(fn($x) => array_diff_key($x, ['order' => 1]), $out)]);
+                flash('Reviews saved.'); go('media', '#reviews');
+
+            case 'legacy_add':
+                $name = str_in('name', 80);
+                if ($name === '') throw new RuntimeException('Enter the project name.');
+                $img = save_image_upload($_FILES['file'] ?? [], 1600, 640);
+                $l = content()['legacy'];
+                $l[] = ['name' => $name, 'location' => str_in('location', 80)] + $img;
+                save_content(['legacy' => $l]);
+                flash("$name added to Brand Legacy."); go('media', '#legacy');
+            case 'legacy_save':
+                $out = [];
+                foreach (content()['legacy'] as $i => $p) {
+                    $in = $_POST['l'][$i] ?? [];
+                    if (!empty($in['delete'])) { delete_upload($p['image']); delete_upload($p['thumb']); continue; }
+                    $p['name'] = mb_substr(trim($in['name'] ?? $p['name']), 0, 80);
+                    $p['location'] = mb_substr(trim($in['location'] ?? ($p['location'] ?? '')), 0, 80);
+                    $p['order'] = (int)($in['order'] ?? $i);
+                    $out[] = $p;
+                }
+                usort($out, fn($a, $b) => $a['order'] <=> $b['order']);
+                save_content(['legacy' => array_map(fn($x) => array_diff_key($x, ['order' => 1]), $out)]);
+                flash('Brand Legacy saved.'); go('media', '#legacy');
+
             case 'video':
                 $url = str_in('video_url', 300);
                 if ($url !== '' && !youtube_id($url)) throw new RuntimeException('Paste a YouTube link (youtube.com/watch?v=… or youtu.be/…).');
@@ -289,6 +360,12 @@ if ($c['whatsapp'] === '') $todos[] = ['WhatsApp number (button hidden until set
 if (!$c['masterplan_final']) $todos[] = ['Final master plan', 'media', '#masterplan'];
 if ($c['brochure'] === '') $todos[] = ['Brochure PDF', 'media', '#brochure'];
 if ($c['video_url'] === '') $todos[] = ['Walkthrough video', 'media', '#video'];
+if ($c['hero_video'] === '') $todos[] = ['Teaser video for the top of the page', 'media', '#hero-video'];
+if (!$c['reviews']) $todos[] = ['Customer review videos', 'media', '#reviews'];
+if (!$c['legacy']) $todos[] = ['Brand Legacy: previous projects', 'media', '#legacy'];
+if (!array_filter($c['social'])) $todos[] = ['Social media links', 'content', '#links'];
+if ($c['blog_url'] === '') $todos[] = ['Blog link', 'content', '#links'];
+if ($c['privacy_text'] === '') $todos[] = ['Privacy policy (from Legal)', 'content', '#legal'];
 if (!valid_gtm($s['tracking']['gtm_id']) && !valid_pixel($s['tracking']['meta_pixel_id'])) $todos[] = ['Ad tracking IDs', 'tracking', ''];
 
 switch ($page) {
@@ -383,9 +460,21 @@ case 'content':
             </div>
             <label>Developer address<input name="developer_address" value="<?= e($c['developer_address']) ?>" maxlength="250"></label>
           </fieldset>
+          <fieldset id="links"><legend>Links and social media</legend>
+            <div class="grid2">
+              <label>Blog link<input name="blog_url" value="<?= e($c['blog_url']) ?>" maxlength="300" placeholder="https://www.realmarkrealty.in/blog"></label>
+              <label>Realmark main website<input name="main_site_url" value="<?= e($c['main_site_url']) ?>" maxlength="300"></label>
+              <?php foreach (['facebook' => 'Facebook', 'instagram' => 'Instagram', 'youtube' => 'YouTube', 'linkedin' => 'LinkedIn', 'x' => 'X (Twitter)'] as $k => $label): ?>
+              <label><?= $label ?> page<input name="social[<?= $k ?>]" value="<?= e($c['social'][$k] ?? '') ?>" maxlength="300" placeholder="https://…"></label>
+              <?php endforeach; ?>
+            </div>
+            <p class="muted">Leave a social link blank to hide its icon.</p>
+          </fieldset>
           <fieldset id="legal"><legend>Legal</legend>
-            <label>WBRERA registration number<input name="rera_number" value="<?= e($c['rera_number']) ?>" maxlength="80" placeholder="WBRERA/P/…"></label>
-            <label>Disclaimer (footer)<textarea name="disclaimer" rows="4" maxlength="2000"><?= e($c['disclaimer']) ?></textarea></label>
+            <label>WBRERA registration number (links to rera.wb.gov.in)<input name="rera_number" value="<?= e($c['rera_number']) ?>" maxlength="80" placeholder="WBRERA/P/…"></label>
+            <label>Disclaimer (shown on the Disclaimer page)<textarea name="disclaimer" rows="6" maxlength="8000"><?= e($c['disclaimer']) ?></textarea></label>
+            <label>Privacy policy (shown on the Privacy policy page)<textarea name="privacy_text" rows="12" maxlength="30000"><?= e($c['privacy_text']) ?></textarea></label>
+            <p class="muted">Formatting for both: leave a blank line between paragraphs, start a line with <code>## </code> for a heading and <code>- </code> for a bullet point.</p>
           </fieldset>
           <fieldset id="banner"><legend>Announcement banner (turn on under Switches)</legend>
             <div class="grid2"><label>Banner text<input name="banner_text" value="<?= e($c['banner_text']) ?>" maxlength="160"></label>
@@ -399,7 +488,60 @@ case 'content':
 case 'media':
     layout('Images & files', function () use ($c, $TIERS) { ?>
         <h1>Images &amp; files</h1>
-        <p class="muted">JPG, PNG or WebP images up to 12 MB; they are resized and saved as JPG. Brochure: PDF up to 40 MB.</p>
+        <p class="muted">Images: JPG, PNG or WebP up to 12 MB (resized and saved as JPG). Teaser video: MP4 up to 80 MB. Brochure: PDF up to 40 MB. Every image on the site is labelled "Artist's impression" automatically.</p>
+
+        <section class="card" id="hero-video"><h2>Teaser video (top of the page)</h2>
+          <?php if ($c['hero_video']): ?><video src="<?= e(media_url($c['hero_video'])) ?>" class="preview" muted controls preload="metadata"></video><?php else: ?><p class="muted">No video yet: the hero image shows instead. Use an MP4, ideally 10–20 MB and 15–30 seconds; it plays muted on a loop.</p><?php endif; ?>
+          <form method="post" enctype="multipart/form-data" class="row"><?= csrf_field() ?><input type="hidden" name="action" value="hero_video">
+            <label>Upload MP4<input type="file" name="file" accept="video/mp4" required></label><button class="btn">Upload</button></form>
+          <?php if ($c['hero_video']): ?><form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="hero_video"><input type="hidden" name="remove" value="1"><button class="link danger">Remove the video</button></form><?php endif; ?>
+        </section>
+
+        <section class="card" id="near-images"><h2>NEAR section images</h2>
+          <div class="thumbs"><?php foreach (['N' => 'No more commute anxiety', 'E' => 'Every life stage, one address', 'A' => 'Access to social infrastructure', 'R' => 'Right-sized community'] as $l => $label): ?>
+            <form method="post" enctype="multipart/form-data" class="thumb"><?= csrf_field() ?><input type="hidden" name="action" value="near_image"><input type="hidden" name="letter" value="<?= $l ?>">
+              <img src="<?= e(media_url($c['near_images'][$l] ?? '')) ?>" alt=""><strong><?= $l ?> · <?= e($label) ?></strong>
+              <label>Replace image<input type="file" name="file" accept="image/jpeg,image/png,image/webp" required></label><button class="btn small">Save</button></form>
+          <?php endforeach; ?></div>
+        </section>
+
+        <section class="card" id="reviews"><h2>Customer reviews (videos)</h2>
+          <?php if ($c['reviews']): ?>
+          <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="reviews_save">
+            <div class="thumbs"><?php foreach ($c['reviews'] as $i => $r): $yid = youtube_id($r['video_url']); ?>
+              <div class="thumb"><?php if ($yid): ?><img src="https://i.ytimg.com/vi/<?= e($yid) ?>/mqdefault.jpg" alt=""><?php endif; ?>
+                <label>Name<input name="r[<?= $i ?>][name]" value="<?= e($r['name']) ?>" maxlength="80"></label>
+                <label>Line under the name<input name="r[<?= $i ?>][note]" value="<?= e($r['note']) ?>" maxlength="120" placeholder="e.g. Homeowner, Realmark Seasonss"></label>
+                <label>Order<input name="r[<?= $i ?>][order]" type="number" value="<?= $i + 1 ?>" min="1" max="99"></label>
+                <label class="check"><input type="checkbox" name="r[<?= $i ?>][delete]" value="1"> Remove</label></div>
+            <?php endforeach; ?></div>
+            <button class="btn">Save reviews</button></form>
+          <?php else: ?><p class="muted">No reviews yet. Upload each review to YouTube (it can be unlisted), then paste the link here.</p><?php endif; ?>
+          <form method="post" class="row add"><?= csrf_field() ?><input type="hidden" name="action" value="review_add">
+            <label class="grow">YouTube link<input name="video_url" required placeholder="https://youtu.be/…"></label>
+            <label>Name<input name="name" maxlength="80"></label>
+            <label>Line under the name<input name="note" maxlength="120" placeholder="Homeowner, Realmark Seasonss"></label>
+            <button class="btn ghost">Add review</button></form>
+        </section>
+
+        <section class="card" id="legacy"><h2>Brand Legacy (previous projects)</h2>
+          <?php if ($c['legacy']): ?>
+          <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="legacy_save">
+            <div class="thumbs"><?php foreach ($c['legacy'] as $i => $p): ?>
+              <div class="thumb"><img src="<?= e(media_url($p['thumb'] ?: $p['image'])) ?>" alt="">
+                <label>Project name<input name="l[<?= $i ?>][name]" value="<?= e($p['name']) ?>" maxlength="80"></label>
+                <label>Location (optional)<input name="l[<?= $i ?>][location]" value="<?= e($p['location'] ?? '') ?>" maxlength="80"></label>
+                <label>Order<input name="l[<?= $i ?>][order]" type="number" value="<?= $i + 1 ?>" min="1" max="99"></label>
+                <label class="check"><input type="checkbox" name="l[<?= $i ?>][delete]" value="1"> Remove</label></div>
+            <?php endforeach; ?></div>
+            <button class="btn">Save Brand Legacy</button></form>
+          <?php endif; ?>
+          <form method="post" enctype="multipart/form-data" class="row add"><?= csrf_field() ?><input type="hidden" name="action" value="legacy_add">
+            <label>Project name<input name="name" required maxlength="80"></label>
+            <label>Location (optional)<input name="location" maxlength="80" placeholder="e.g. Joka"></label>
+            <label>Photo<input type="file" name="file" accept="image/jpeg,image/png,image/webp" required></label>
+            <button class="btn ghost">Add project</button></form>
+        </section>
 
         <section class="card" id="gallery"><h2>Gallery</h2>
           <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="gallery_save">
