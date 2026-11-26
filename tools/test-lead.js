@@ -34,7 +34,7 @@ function fakeRes() {
   const b = sent.body;
   assert.strictEqual(b.firstName, "Ananya"); assert.strictEqual(b.lastName, "Sen Gupta");
   assert.strictEqual(b.mobilePhone, "+919830012345");
-  assert.strictEqual(b.product, "REALMARK 9 MINNUTES"); assert.strictEqual(b.campaign, "9 Minnutes Microsite");
+  assert.strictEqual(b.product, "9 MINNUTES"); assert.strictEqual(b.campaign, "9MIN Test");
   assert.strictEqual(b.originFrom, "Auto Lead from Digital");
   assert.strictEqual(b.isUpdatefromUIDate, false); assert.strictEqual(b.isImported, true);
   assert.match(b.DumpdataObjectId, /^\d{17}$/);

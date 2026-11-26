@@ -15,16 +15,16 @@ No build step and no npm packages: Node 18+ only.
 
 ---
 
-## 1. Before deploying: set up Farvision (Realmark CRM admin)
+## 1. Farvision setup (done 26 Nov 2026)
 
-Farvision's integration notes ask for a separate Product and Campaign for each integration. Create:
+Already set up in Realmark's Farvision:
 
-| In Farvision | Exact name (must match the setting below) |
-|---|---|
-| Product | `REALMARK 9 MINNUTES` |
-| Campaign | `9 Minnutes Microsite` |
+| In Farvision | Name | Notes |
+|---|---|---|
+| Product | `9 MINNUTES` | Product ID 6, Residential |
+| Campaign | `9MIN Test` | Campaign ID 31: Digital Media / Own Websites / Website, product 9 MINNUTES, Main Campaign, Active |
 
-If you choose other names, put them in `FARVISION_PRODUCT` / `FARVISION_CAMPAIGN` (step 3).
+The code sends exactly these names. If either is renamed in Farvision, set `FARVISION_PRODUCT` / `FARVISION_CAMPAIGN` (step 3) to match.
 
 ## 2. What gets sent to Farvision
 
@@ -37,8 +37,8 @@ If you choose other names, put them in `FARVISION_PRODUCT` / `FARVISION_CAMPAIGN
 | mobilePhone | `+91` + 10-digit mobile |
 | comments | BHK wanted, best time to call, UTM / gclid / fbclid, landing page, consent |
 | originFrom | `Auto Lead from Digital` (static) |
-| product | `REALMARK 9 MINNUTES` |
-| campaign | `9 Minnutes Microsite` |
+| product | `9 MINNUTES` |
+| campaign | `9MIN Test` |
 | isUpdatefromUIDate | `false` (static) |
 | isImported | `true` (static) |
 | DumpdataObjectId | Unique per lead: IST timestamp `ddMMyyyyHHmmss` + 3 random digits |
@@ -54,8 +54,8 @@ A lead counts as delivered only when Farvision replies `{"status":true, ...}`.
    | Name | Value |
    |---|---|
    | `FARVISION_CLIENT_ID` | The ClientId from Farvision. **Secret**: never put it in the code or in chat |
-   | `FARVISION_PRODUCT` | `REALMARK 9 MINNUTES` (only if different from the default) |
-   | `FARVISION_CAMPAIGN` | `9 Minnutes Microsite` (only if different from the default) |
+   | `FARVISION_PRODUCT` | `9 MINNUTES` (only if different from the default) |
+   | `FARVISION_CAMPAIGN` | `9MIN Test` (only if different from the default) |
    | `BACKUP_WEBHOOK_URL` | Optional: a webhook that gets a copy of every lead (see section 6) |
 
 4. Deploy. Vercel gives a test link like `9minnutes.vercel.app`.
