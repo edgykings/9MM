@@ -89,6 +89,24 @@ Search `public/index.html` for the yellow placeholder tags:
 
 Edit the text directly in `public/index.html` and redeploy (pushing to GitHub redeploys automatically).
 
+
+## 5b. Content slots for Realmark's team (added 26 Nov 2026)
+
+New sections: Floor plans, Specifications, Gallery + video, Master plan, The team (consultants), FAQ, Google Map, WhatsApp button, brochure download.
+
+| What | Where it goes | Now |
+|---|---|---|
+| Gallery images | `public/assets/gallery/<name>.jpg` (full size, ~1800 px wide) and `<name>-thumb.jpg` (~640 px). Same names = no code change | Interim brochure renders |
+| Walkthrough video | Replace the `#video` box in `index.html` with a YouTube embed | Placeholder |
+| Master plan | `public/assets/masterplan.jpg` (replace the file) | Small-brochure version with known issues |
+| Floor plans | `public/assets/plans/plan-NN.jpg` + `-thumb.jpg`; data in `tools/floorplans.json` | All 27 plans from the 20 Nov PDF |
+| Brochure PDF | `public/assets/9minnutes-brochure.pdf` (shown after a visitor registers) | Missing |
+| WhatsApp number | `wa.me/91…` link near the end of `index.html` | Site office number, **confirm it is on WhatsApp** |
+| Map pin | Google Maps `iframe` in the Location section | Searches the road name; swap for the exact site pin |
+| FAQ answers | FAQ section in `index.html` | Possession, RERA, KMC pending |
+
+Every unconfirmed item is marked with a yellow `[ADD …]`, `[CONFIRM …]` or `[REPLACE …]` tag. Search `index.html` for `[` to find them all.
+
 ## 6. Optional: backup copy of every lead
 
 If `BACKUP_WEBHOOK_URL` is set, every lead is also POSTed there as JSON (with `crmOk` true/false). A Google Apps Script web app that appends to a Google Sheet and emails sales works well. If Farvision is down, the visitor still gets the thank-you message and the lead is kept in the backup.

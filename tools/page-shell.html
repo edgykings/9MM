@@ -28,6 +28,17 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline:2px solid 
 [hidden]{display:none!important}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 button[disabled]{opacity:.6;cursor:wait}
+.plan-tab{font:inherit;font-size:15px;padding:12px 20px;border-radius:999px;border:1px solid #1C3A50;background:#FFFFFF;color:#1C3A50;cursor:pointer;min-height:44px}
+.plan-tab[aria-pressed="true"]{background:#1C3A50;color:#FFFFFF}
+.plan-card[hidden]{display:none!important}
+.zoom img{transition:transform .3s}.zoom:hover img{transform:scale(1.03)}
+.wa{position:fixed;right:20px;bottom:20px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);z-index:20}
+#lightbox{border:0;padding:0;max-width:96vw;max-height:94vh;background:#FFFFFF}
+#lightbox::backdrop{background:rgba(20,30,40,.85)}
+#lightbox img{display:block;max-width:96vw;max-height:84vh;width:auto;height:auto}
+.lb-cap{margin:0;padding:10px 16px;font-size:14px;color:#2E3133}
+.lb-close{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.9);font-size:28px;line-height:1;cursor:pointer}
+details summary::marker{color:#B48B2A}
 @media (max-width:640px){header nav a:not(:last-child){display:none}.hero{background-image:linear-gradient(180deg,rgba(28,58,80,.55) 0%,rgba(28,58,80,.92) 60%),url(/assets/hero.jpg)}}
 </style>
 </head>

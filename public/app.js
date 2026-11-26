@@ -84,3 +84,30 @@
       });
   });
 })();
+
+// Floor plan tabs + image lightbox
+(function () {
+  "use strict";
+  var tabs = document.querySelectorAll(".plan-tab");
+  function showTier(tier) {
+    tabs.forEach(function (t) { t.setAttribute("aria-pressed", String(t.dataset.tier === tier)); });
+    document.querySelectorAll(".plan-card").forEach(function (c) { c.hidden = c.dataset.tier !== tier; });
+  }
+  tabs.forEach(function (t) { t.addEventListener("click", function () { showTier(t.dataset.tier); }); });
+  if (tabs.length) showTier(tabs[0].dataset.tier);
+
+  var box = document.getElementById("lightbox");
+  if (!box || typeof box.showModal !== "function") return; // old browsers just follow the link
+  var img = box.querySelector("img"), cap = box.querySelector(".lb-cap");
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a.zoom");
+    if (!a) return;
+    e.preventDefault();
+    img.src = a.getAttribute("href");
+    img.alt = a.dataset.caption || "";
+    cap.textContent = a.dataset.caption || "";
+    box.showModal();
+  });
+  box.querySelector(".lb-close").addEventListener("click", function () { box.close(); });
+  box.addEventListener("click", function (e) { if (e.target === box) box.close(); });
+})();
