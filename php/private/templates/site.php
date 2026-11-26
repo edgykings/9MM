@@ -214,8 +214,10 @@ $planLabel = function (array $p): string {
 <span class="aiw" style="grid-column:1/-1"><img src="/assets/aerial.jpg" alt="Aerial view of 9 Minnutes among greenery near the Metro" loading="lazy" style="width:100%;aspect-ratio:21/9;object-fit:cover;display:block"></span>
 </div>
 </div>
-<div class="map"><iframe title="Map showing 9 Minnutes, <?= e($c['site_address']) ?>" src="https://maps.google.com/maps?q=<?= rawurlencode($c['map_query']) ?>&amp;z=15&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-<p style="margin:10px 0 0;font-size:14px"><a href="https://maps.google.com/?q=<?= rawurlencode($c['map_query']) ?>" target="_blank" rel="noopener">Open in Google Maps</a></p></div>
+<?php $mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($c['map_query']); ?>
+<div class="map"><a class="map-shot" href="<?= e($mapsUrl) ?>" target="_blank" rel="noopener" aria-label="Open the 9 Minnutes location in Google Maps (opens in a new tab)">
+<img src="<?= e(media_url($c['map_image'])) ?>" alt="Google Maps view of the 9 Minnutes location on Hanspukur Green Park Road, Joka, near Joka Metro and IIM Calcutta" loading="lazy" width="1330" height="740">
+<span class="map-cta"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Google Maps</span></a></div>
 </div></section>
 
 <?php if ($c['reviews'] || $s['show_todo_tags']): ?>

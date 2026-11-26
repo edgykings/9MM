@@ -63,6 +63,7 @@ function default_content(): array {
         'email' => 'connect@realmarkrealty.in',
         'whatsapp' => '',   // digits with country code, e.g. 919836780001 — leave blank until confirmed
         'site_address' => '61, Hanspukur Green Park Road, Joka, Kolkata 700104',
+        'map_image' => 'assets/map-location.jpg', // screenshot of Google Maps, links to Google Maps
         'map_query' => 'Hanspukur Green Park Road, Joka, Kolkata 700104',
         'developer_address' => 'Happy Prestige Building, 3rd Floor, 82 Harish Mukherjee Road, Bhowanipore, Kolkata 700025',
         'developer_phone' => '+91 33 3504 3333',

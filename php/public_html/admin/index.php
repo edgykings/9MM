@@ -232,6 +232,12 @@ if ($isPost) {
                 save_content($changes);
                 flash('Master plan saved.'); go('media', '#masterplan');
 
+            case 'map_image':
+                $img = save_image_upload($_FILES['file'] ?? [], 1600, 400);
+                delete_upload($img['thumb']); delete_upload(content()['map_image']);
+                save_content(['map_image' => $img['image']]);
+                flash('Map screenshot replaced.'); go('media', '#map-image');
+
             case 'mp_map':
                 $m = content()['mp_map'];
                 $lim = ['x' => [0, 100], 'y' => [0, 100], 'w' => [2, 100], 'r' => [-180, 180], 'z' => [1, 4]];
@@ -599,6 +605,13 @@ case 'media':
             <label>Replace image<input type="file" name="file" accept="image/jpeg,image/png,image/webp"></label>
             <label class="check"><input type="checkbox" name="final" value="1" <?= $c['masterplan_final'] ? 'checked' : '' ?>> This is the approved final version (hides the reminder)</label>
             <button class="btn">Save</button></form>
+        </section>
+
+        <section class="card" id="map-image"><h2>Location map (Google Maps screenshot)</h2>
+          <img src="<?= e(media_url($c['map_image'])) ?>" alt="Current map screenshot" class="preview">
+          <p class="muted">Clicking it on the site opens Google Maps for: <strong><?= e($c['map_query']) ?></strong> (change this in Content). Keep the Google logo and "Map data" line visible in any new screenshot.</p>
+          <form method="post" enctype="multipart/form-data" class="row"><?= csrf_field() ?><input type="hidden" name="action" value="map_image">
+            <label>Replace screenshot<input type="file" name="file" accept="image/jpeg,image/png,image/webp" required></label><button class="btn ghost">Upload</button></form>
         </section>
 
         <section class="card" id="mp-map"><h2>Master plan on aerial view</h2>
