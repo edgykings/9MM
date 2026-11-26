@@ -1,5 +1,10 @@
 # 9 Minnutes microsite – handover for IT
 
+> **Two versions are in this repository.**
+> - `php/` – **use this one on Realmark's own PHP hosting.** Microsite + admin panel (leads, content, images, switches, ad tracking). See `php/README.md`.
+> - Root folder (`public/`, `api/`, `lib/`) – the earlier Node/Vercel version without an admin panel, kept for reference.
+
+
 Pre-launch microsite for **9 Minnutes** (Realmark Realty, Joka). The page is static, and a single serverless function sends every enquiry straight into **Farvision** through its LeadSync API.
 
 ```

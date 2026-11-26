@@ -1,0 +1,2 @@
+# Only matters if this folder ends up inside public_html: block all web access.
+Require all denied

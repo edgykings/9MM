@@ -1,0 +1,245 @@
+[
+ {
+  "page": 2,
+  "tier": "ESSENTIAL",
+  "flat": "L",
+  "floors": "1st to 11th Floor",
+  "cfg": "2 BHK | 2 T | TERRACE",
+  "carpet": "600",
+  "terrace": "67"
+ },
+ {
+  "page": 4,
+  "tier": "ESSENTIAL",
+  "flat": "M",
+  "floors": "1st to 11th Floor",
+  "cfg": "2 BHK | 2 T | TERRACE",
+  "carpet": "600",
+  "terrace": "365"
+ },
+ {
+  "page": 6,
+  "tier": "SMART",
+  "flat": "B",
+  "floors": "2nd to 11th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "716",
+  "terrace": "38"
+ },
+ {
+  "page": 8,
+  "tier": "SMART",
+  "flat": "G",
+  "floors": "2nd to 11th Floor",
+  "cfg": "3 BHK | 2 T",
+  "carpet": "668",
+  "terrace": null
+ },
+ {
+  "page": 10,
+  "tier": "PREMIUM",
+  "flat": "A",
+  "floors": "2nd to 11th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "855",
+  "terrace": "233"
+ },
+ {
+  "page": 12,
+  "tier": "PREMIUM",
+  "flat": "C",
+  "floors": "2nd to 11th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "816",
+  "terrace": "94"
+ },
+ {
+  "page": 14,
+  "tier": "PREMIUM",
+  "flat": "E",
+  "floors": "1st & 2nd Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "874",
+  "terrace": "132"
+ },
+ {
+  "page": 16,
+  "tier": "PREMIUM",
+  "flat": "E",
+  "floors": "3rd, 6th & 9th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "874",
+  "terrace": "65"
+ },
+ {
+  "page": 18,
+  "tier": "PREMIUM",
+  "flat": "E",
+  "floors": "4th, 7th & 10th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "874",
+  "terrace": "76"
+ },
+ {
+  "page": 20,
+  "tier": "PREMIUM",
+  "flat": "E",
+  "floors": "5th, 8th & 11th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "874",
+  "terrace": "66"
+ },
+ {
+  "page": 22,
+  "tier": "PREMIUM",
+  "flat": "F",
+  "floors": "1st to 11th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "855",
+  "terrace": "392"
+ },
+ {
+  "page": 24,
+  "tier": "PREMIUM",
+  "flat": "H",
+  "floors": "1st & 2nd Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "860",
+  "terrace": "300"
+ },
+ {
+  "page": 26,
+  "tier": "PREMIUM",
+  "flat": "H",
+  "floors": "3rd, 6th & 9th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "860",
+  "terrace": "79"
+ },
+ {
+  "page": 28,
+  "tier": "PREMIUM",
+  "flat": "H",
+  "floors": "4th, 7th & 10th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "856",
+  "terrace": "77"
+ },
+ {
+  "page": 30,
+  "tier": "PREMIUM",
+  "flat": "H",
+  "floors": "5th, 8th & 11th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "856",
+  "terrace": "78"
+ },
+ {
+  "page": 32,
+  "tier": "PREMIUM",
+  "flat": "J",
+  "floors": "1st & 2nd Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "859",
+  "terrace": "465"
+ },
+ {
+  "page": 34,
+  "tier": "PREMIUM",
+  "flat": "J",
+  "floors": "3rd, 6th & 9th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "859",
+  "terrace": "64"
+ },
+ {
+  "page": 36,
+  "tier": "PREMIUM",
+  "flat": "J",
+  "floors": "4th, 7th & 10th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "859",
+  "terrace": "65"
+ },
+ {
+  "page": 38,
+  "tier": "PREMIUM",
+  "flat": "J",
+  "floors": "5th, 8th & 11th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "859",
+  "terrace": "64"
+ },
+ {
+  "page": 40,
+  "tier": "PREMIUM",
+  "flat": "K",
+  "floors": "1st & 2nd Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "877",
+  "terrace": "191"
+ },
+ {
+  "page": 42,
+  "tier": "PREMIUM",
+  "flat": "K",
+  "floors": "3rd, 6th & 9th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "877",
+  "terrace": "65"
+ },
+ {
+  "page": 44,
+  "tier": "PREMIUM",
+  "flat": "K",
+  "floors": "4th, 7th & 10th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "877",
+  "terrace": "75"
+ },
+ {
+  "page": 46,
+  "tier": "PREMIUM",
+  "flat": "K",
+  "floors": "5th, 8th & 11th Floor",
+  "cfg": "3 BHK | 2 T | TERRACE",
+  "carpet": "877",
+  "terrace": "66"
+ },
+ {
+  "page": 48,
+  "tier": "SIGNATURE",
+  "flat": "D",
+  "floors": "2nd Floor",
+  "cfg": "4 BHK | 3 T | TERRACE",
+  "carpet": "1099",
+  "terrace": "97"
+ },
+ {
+  "page": 50,
+  "tier": "SIGNATURE",
+  "flat": "D",
+  "floors": "3rd, 6th & 9th Floor",
+  "cfg": "4 BHK | 3 T | TERRACE",
+  "carpet": "1099",
+  "terrace": "77"
+ },
+ {
+  "page": 52,
+  "tier": "SIGNATURE",
+  "flat": "D",
+  "floors": "4th, 7th & 10th Floor",
+  "cfg": "4 BHK | 3 T | TERRACE",
+  "carpet": "1099",
+  "terrace": "72"
+ },
+ {
+  "page": 54,
+  "tier": "SIGNATURE",
+  "flat": "D",
+  "floors": "5th, 8th & 11th Floor",
+  "cfg": "4 BHK | 3 T | TERRACE",
+  "carpet": "1096",
+  "terrace": "72"
+ }
+]

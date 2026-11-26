@@ -3,3 +3,10 @@
 node_modules
 .vercel
 .DS_Store
+# PHP version: secrets, data and uploads stay on the server
+php/private/config.php
+php/private/data/*
+!php/private/data/.htaccess
+php/public_html/uploads/*
+!php/public_html/uploads/.htaccess
+!php/public_html/uploads/.gitkeep

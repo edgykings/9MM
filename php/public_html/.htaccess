@@ -1,0 +1,25 @@
+# 9 Minnutes – Apache settings (cPanel). Safe to keep if the host ignores some lines.
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  <FilesMatch "\.(jpg|jpeg|png|webp|svg|css|js)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
+
+# Never serve hidden files, PHP includes or a private folder placed inside public_html.
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+<Files "boot.php">
+  Require all denied
+</Files>
+RedirectMatch 404 ^/private(/|$)
+
+# Force HTTPS (uncomment once the SSL certificate is active)
+# RewriteEngine On
+# RewriteCond %{HTTPS} !=on
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
