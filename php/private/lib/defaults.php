@@ -45,7 +45,7 @@ function default_content(): array {
         'masterplan_final' => false,
         // Master plan shown on the aerial view of the area (position set in admin → Images & files)
         'mp_map' => ['on' => true, 'aerial' => 'assets/masterplan-aerial.jpg', 'plan' => 'assets/masterplan-cutout.png',
-                     'x' => 53.2, 'y' => 29.0, 'w' => 13.0, 'r' => 40.0, 'z' => 2.2, 'confirmed' => false,
+                     'x' => 54.9, 'y' => 27.2, 'w' => 13.0, 'r' => -165.0, 'z' => 2.2, 'confirmed' => false,
                      'credit' => 'Aerial imagery: Esri, Maxar. Indicative placement.'],
         'brochure' => '',
         'faq' => [
