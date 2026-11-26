@@ -286,7 +286,7 @@ footer .disc{margin:0;font-size:12px;line-height:1.6}
 @media (max-width:640px){.mpmap{aspect-ratio:4/3}.mpmap .mp-credit{top:10px;bottom:auto;font-size:10px}}
 .foot-logo-9{height:30px;margin-bottom:8px}
 
-.foot-brand{display:inline-flex;flex-direction:column;gap:6px;margin:0 0 36px;text-decoration:none}
-.foot-brand img{height:56px;width:auto;display:block}
-.foot-brand span{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#8A7A6E}
-@media (max-width:640px){.foot-brand img{height:44px}}
+/* footer logos share one row height so they line up */
+.foot-logo-box{display:flex;align-items:center;height:44px;margin-bottom:14px}
+.foot-logo-box .foot-logo{margin:0;height:26px;width:auto}
+.foot-logo-box .foot-logo-9{height:40px}
