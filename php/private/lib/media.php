@@ -33,6 +33,24 @@ function write_jpeg($src, string $dest, int $maxW): void {
     @chmod($dest, 0644);
 }
 
+/** Saves an uploaded PNG keeping its transparency (re-encoded). Returns 'uploads/x.png' or throws. */
+function save_png_upload(array $file, int $maxW = 1600): string {
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) throw new RuntimeException(upload_error($file['error'] ?? 4));
+    if ($file['size'] > 12 * 1024 * 1024) throw new RuntimeException('Image is larger than 12 MB.');
+    if ((new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']) !== 'image/png') throw new RuntimeException('Upload a PNG with a transparent background.');
+    $src = @imagecreatefrompng($file['tmp_name']);
+    if (!$src) throw new RuntimeException('That image could not be read.');
+    $w = imagesx($src); $h = imagesy($src); $nw = min($w, $maxW); $nh = (int)round($h * $nw / $w);
+    $dst = imagecreatetruecolor($nw, $nh);
+    imagealphablending($dst, false); imagesavealpha($dst, true);
+    imagefill($dst, 0, 0, imagecolorallocatealpha($dst, 0, 0, 0, 127));
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $nw, $nh, $w, $h);
+    $name = 'plan-' . date('Ymd') . '-' . bin2hex(random_bytes(5)) . '.png';
+    if (!imagepng($dst, UPLOADS_DIR . "/$name", 7)) throw new RuntimeException('Could not save the image.');
+    imagedestroy($src); imagedestroy($dst); @chmod(UPLOADS_DIR . "/$name", 0644);
+    return "uploads/$name";
+}
+
 /** Saves an uploaded PDF. Returns 'uploads/x.pdf' or throws. */
 function save_pdf_upload(array $file): string {
     if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) throw new RuntimeException(upload_error($file['error'] ?? 4));
@@ -50,7 +68,7 @@ function save_pdf_upload(array $file): string {
 function delete_upload(?string $path): void {
     if (!$path || !str_starts_with($path, 'uploads/')) return;
     $name = basename($path);
-    if (!preg_match('/^[a-z0-9-]+\.(jpg|pdf|mp4)$/', $name)) return;
+    if (!preg_match('/^[a-z0-9-]+\.(jpg|png|pdf|mp4)$/', $name)) return;
     @unlink(UPLOADS_DIR . "/$name");
 }
 

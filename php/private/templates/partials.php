@@ -28,6 +28,16 @@ function social_icon(string $k): string {
     return '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">' . $p . '</svg>';
 }
 
+/** Master plan on the aerial view. $class 'mp-full' shows the whole aerial (admin alignment). */
+function mp_stage(array $m, string $class = ''): void {
+    $d = fn($k) => e((string)(float)$m[$k]); ?>
+<div class="mpmap <?= e($class) ?>" data-x="<?= $d('x') ?>" data-y="<?= $d('y') ?>" data-w="<?= $d('w') ?>" data-r="<?= $d('r') ?>" data-z="<?= $d('z') ?>">
+  <div class="mp-layer"><img class="mp-aerial" src="<?= e(media_url($m['aerial'])) ?>" alt="" draggable="false"><img class="mp-plan" src="<?= e(media_url($m['plan'])) ?>" alt="9 Minnutes master plan placed on an aerial view of the site in Joka" draggable="false"></div>
+  <span class="ai-label">Artist's impression</span>
+  <?php if (!empty($m['credit'])): ?><span class="mp-credit"><?= e($m['credit']) ?></span><?php endif; ?>
+</div>
+<?php }
+
 function render_head(array $c, array $s, string $title, string $description): void {
     $t = $s['tracking'];
     $gtm = valid_gtm($t['gtm_id'] ?? ''); $pixel = valid_pixel($t['meta_pixel_id'] ?? ''); $ga4 = valid_ga4($t['ga4_id'] ?? '');

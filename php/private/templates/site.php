@@ -1,6 +1,6 @@
 <?php
 /** @var array $c content, @var array $s settings */
-require __DIR__ . '/partials.php';
+require_once __DIR__ . '/partials.php';
 $todo = fn(string $t) => todo_tag($s, $t);
 $yt = youtube_id($c['video_url']);
 $wa = preg_replace('/\D/', '', (string)$c['whatsapp']);
@@ -190,7 +190,13 @@ $planLabel = function (array $p): string {
 <p class="eyebrow">Master plan</p>
 <h2 class="h2">A thoughtfully planned community.</h2>
 <p class="lead">One G+11 tower with landscaped spaces to relax, play, celebrate and connect, on Hanspukur Green Park Road.</p>
+<?php $mp = $c['mp_map']; if (!empty($mp['on'])): ?>
+<?php mp_stage($mp); ?>
+<p class="mp-actions"><a href="<?= e(media_url($c['masterplan'])) ?>" class="zoom btn-line" data-caption="Master plan with legend (artist's impression)">View the master plan with legend</a></p>
+<?php if (empty($mp['confirmed'])): ?><p style="margin:12px 0 0;font-size:13px"><?= $todo('CONFIRM: plot position on the aerial view (admin → Images & files → Master plan on aerial view)') ?></p><?php endif; ?>
+<?php else: ?>
 <a href="<?= e(media_url($c['masterplan'])) ?>" class="zoom aiw" data-caption="Master plan (artist's impression)" style="display:block"><img src="<?= e(media_url($c['masterplan'])) ?>" alt="Master plan of 9 Minnutes showing the tower, landscaped areas, pool and amenities" loading="lazy" style="width:100%;height:auto;display:block;border:1px solid #E4DCD8"></a>
+<?php endif; ?>
 <?php if (!$c['masterplan_final']): ?><p style="margin:12px 0 0;font-size:13px"><?= $todo('REPLACE: cleaned-up master plan from the designer') ?></p><?php endif; ?>
 </div></section>
 
@@ -298,6 +304,7 @@ $planLabel = function (array $p): string {
 
 <?php render_footer($c, $s); ?>
 <dialog id="lightbox" aria-label="Enlarged image"><button type="button" class="lb-close" aria-label="Close">×</button><img alt=""><p class="lb-cap"></p></dialog>
+<script src="/mpmap.js?v=<?= @filemtime(PUBLIC_DIR . '/mpmap.js') ?>" defer></script>
 <script src="/app.js?v=<?= @filemtime(PUBLIC_DIR . '/app.js') ?>" defer></script>
 </body>
 </html>

@@ -43,6 +43,10 @@ function default_content(): array {
         'video_url' => '',
         'masterplan' => 'assets/masterplan.jpg',
         'masterplan_final' => false,
+        // Master plan shown on the aerial view of the area (position set in admin → Images & files)
+        'mp_map' => ['on' => true, 'aerial' => 'assets/masterplan-aerial.jpg', 'plan' => 'assets/masterplan-cutout.png',
+                     'x' => 53.2, 'y' => 29.0, 'w' => 13.0, 'r' => 40.0, 'z' => 2.2, 'confirmed' => false,
+                     'credit' => 'Aerial imagery: Esri, Maxar. Indicative placement.'],
         'brochure' => '',
         'faq' => [
             ['q' => 'Where exactly is 9 Minnutes?', 'a' => '61, Hanspukur Green Park Road, Joka, Kolkata 700104, about 150 metres from Diamond Harbour Road.'],

@@ -1,6 +1,6 @@
 <?php
 /** @var array $c, @var array $s, @var string $legalTitle, @var string $legalText, @var string $legalTodo */
-require __DIR__ . '/partials.php';
+require_once __DIR__ . '/partials.php';
 render_head($c, $s, $legalTitle . ' | 9 Minnutes by Realmark', $legalTitle . ' for the 9 Minnutes microsite by Realmark Realty.');
 render_header($c, $s, '/');
 ?>

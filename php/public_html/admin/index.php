@@ -4,6 +4,7 @@ define('PUBLIC_ROOT', dirname(__DIR__));
 require dirname(__DIR__) . '/boot.php';
 require PRIVATE_DIR . '/lib/auth.php';
 require PRIVATE_DIR . '/lib/media.php';
+require_once PRIVATE_DIR . '/templates/partials.php';
 
 header('X-Robots-Tag: noindex, nofollow');
 header('X-Frame-Options: DENY');
@@ -231,6 +232,32 @@ if ($isPost) {
                 save_content($changes);
                 flash('Master plan saved.'); go('media', '#masterplan');
 
+            case 'mp_map':
+                $m = content()['mp_map'];
+                $lim = ['x' => [0, 100], 'y' => [0, 100], 'w' => [2, 100], 'r' => [-180, 180], 'z' => [1, 4]];
+                foreach ($lim as $k => [$lo, $hi]) {
+                    $v = filter_var($_POST[$k] ?? null, FILTER_VALIDATE_FLOAT);
+                    if ($v !== false && $v !== null) $m[$k] = round(max($lo, min($hi, $v)), 2);
+                }
+                $m['on'] = !empty($_POST['on']);
+                $m['confirmed'] = !empty($_POST['confirmed']);
+                $m['credit'] = mb_substr(trim((string)($_POST['credit'] ?? $m['credit'])), 0, 160);
+                save_content(['mp_map' => $m]);
+                flash('Master plan position saved. It is live on the site now.'); go('media', '#mp-map');
+            case 'mp_aerial':
+                $m = content()['mp_map'];
+                $img = save_image_upload($_FILES['file'] ?? [], 2600, 400);
+                delete_upload($img['thumb']); delete_upload($m['aerial']);
+                $m['aerial'] = $img['image']; $m['confirmed'] = false;
+                save_content(['mp_map' => $m]);
+                flash('Aerial image replaced. Drag the master plan into place again and save.'); go('media', '#mp-map');
+            case 'mp_plan':
+                $m = content()['mp_map'];
+                $png = save_png_upload($_FILES['file'] ?? []);
+                delete_upload($m['plan']); $m['plan'] = $png;
+                save_content(['mp_map' => $m]);
+                flash('Master plan cut-out replaced.'); go('media', '#mp-map');
+
             case 'brochure':
                 if (!empty($_POST['remove'])) { delete_upload(content()['brochure']); save_content(['brochure' => '']); flash('Brochure removed.'); go('media', '#brochure'); }
                 $pdf = save_pdf_upload($_FILES['file'] ?? []);
@@ -358,6 +385,7 @@ if ($c['metro_note'] === '') $todos[] = ['Metro travel-time wording', 'content',
 foreach ($c['faq'] as $f) if (trim($f['a']) === '') $todos[] = ['FAQ answer: ' . $f['q'], 'content', '#faq'];
 if ($c['whatsapp'] === '') $todos[] = ['WhatsApp number (button hidden until set)', 'content', '#contact'];
 if (!$c['masterplan_final']) $todos[] = ['Final master plan', 'media', '#masterplan'];
+if (!empty($c['mp_map']['on']) && empty($c['mp_map']['confirmed'])) $todos[] = ['Check the master plan position on the aerial view', 'media', '#mp-map'];
 if ($c['brochure'] === '') $todos[] = ['Brochure PDF', 'media', '#brochure'];
 if ($c['video_url'] === '') $todos[] = ['Walkthrough video', 'media', '#video'];
 if ($c['hero_video'] === '') $todos[] = ['Teaser video for the top of the page', 'media', '#hero-video'];
@@ -573,6 +601,32 @@ case 'media':
             <button class="btn">Save</button></form>
         </section>
 
+        <section class="card" id="mp-map"><h2>Master plan on aerial view</h2>
+          <?php $mp = $c['mp_map']; ?>
+          <p class="muted">Drag the master plan onto the plot. Use the sliders to turn it until north matches and to size it to the plot. The small frame shows how visitors see it.</p>
+          <form method="post" id="mp-align"><?= csrf_field() ?><input type="hidden" name="action" value="mp_map">
+            <?php mp_stage($mp, 'mp-full'); ?>
+            <div class="grid2 mp-controls">
+              <label>Turn (degrees) <input type="range" min="-180" max="180" step="0.5" data-k="r"><input type="number" name="r" step="0.5" data-k="r"></label>
+              <label>Size (% of aerial width) <input type="range" min="2" max="60" step="0.1" data-k="w"><input type="number" name="w" step="0.1" data-k="w"></label>
+              <label>Zoom on the website <input type="range" min="1" max="4" step="0.05" data-k="z"><input type="number" name="z" step="0.05" data-k="z"></label>
+              <label>Position across / down (%) <span class="row"><input type="number" name="x" step="0.1" data-k="x"><input type="number" name="y" step="0.1" data-k="y"></span></label>
+            </div>
+            <h3>How visitors see it</h3>
+            <div class="mp-preview"><?php mp_stage($mp); ?></div>
+            <label>Credit line on the image<input name="credit" value="<?= e($mp['credit']) ?>" maxlength="160"></label>
+            <label class="check"><input type="checkbox" name="on" value="1" <?= !empty($mp['on']) ? 'checked' : '' ?>> Show the aerial view on the site (otherwise the plain master plan shows)</label>
+            <label class="check"><input type="checkbox" name="confirmed" value="1" <?= !empty($mp['confirmed']) ? 'checked' : '' ?>> The position is checked against the actual plot (hides the reminder)</label>
+            <button class="btn">Save position</button>
+          </form>
+          <div class="row" style="margin-top:18px">
+            <form method="post" enctype="multipart/form-data" class="row"><?= csrf_field() ?><input type="hidden" name="action" value="mp_aerial">
+              <label>Replace aerial photo (drone shot or satellite image, JPG)<input type="file" name="file" accept="image/jpeg,image/png,image/webp" required></label><button class="btn ghost">Upload</button></form>
+            <form method="post" enctype="multipart/form-data" class="row"><?= csrf_field() ?><input type="hidden" name="action" value="mp_plan">
+              <label>Replace master plan cut-out (PNG, transparent background)<input type="file" name="file" accept="image/png" required></label><button class="btn ghost">Upload</button></form>
+          </div>
+        </section>
+
         <section class="card" id="brochure"><h2>Brochure PDF</h2>
           <p><?= $c['brochure'] ? 'Current: <a href="' . e(media_url($c['brochure'])) . '" target="_blank" rel="noopener">' . e(basename($c['brochure'])) . '</a>. Visitors get a download button after registering.' : 'No brochure yet. When you upload one, visitors get a download button after they register.' ?></p>
           <form method="post" enctype="multipart/form-data" class="row"><?= csrf_field() ?><input type="hidden" name="action" value="brochure">
@@ -689,6 +743,7 @@ function layout(string $title, callable $body, bool $nav = true): void {
 <?php endif; ?>
 <main><?php if ($f): ?><p class="alert <?= $f[0] === 'err' ? 'err' : 'ok' ?>" role="status"><?= e($f[1]) ?></p><?php endif; ?>
 <?php $body(); ?></main>
+<script src="/mpmap.js?v=<?= @filemtime(PUBLIC_DIR . '/mpmap.js') ?>"></script>
 <script src="admin.js?v=<?= @filemtime(__DIR__ . '/admin.js') ?>"></script>
 </body></html><?php
 }
