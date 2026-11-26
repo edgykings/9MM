@@ -102,9 +102,10 @@ function render_footer(array $c, array $s, string $base = ''): void {
     $labels = ['facebook' => 'Facebook', 'instagram' => 'Instagram', 'youtube' => 'YouTube', 'linkedin' => 'LinkedIn', 'x' => 'X'];
     ?>
 <footer id="contact"><div class="in">
+<a href="<?= $base ?>#top" class="foot-brand" aria-label="9 Minnutes home"><img src="/assets/logo-9minnutes.svg" alt="9 Minnutes" width="294" height="72"><span>Joka's most walkable address</span></a>
 <h2 class="foot-h">Get in touch</h2>
 <div class="cols">
-<div><img src="/assets/logo-9minnutes.svg" alt="9 Minnutes" class="foot-logo foot-logo-9"><strong>Site office</strong><br><?= e($c['site_address']) ?><br>
+<div><strong>Site office</strong><br><?= e($c['site_address']) ?><br>
 <a href="<?= e($telHref) ?>"><?= e($c['phone']) ?></a><br><a href="mailto:<?= e($c['email']) ?>"><?= e($c['email']) ?></a></div>
 <div><img src="/assets/logo-realmark.svg" alt="Realmark" class="foot-logo"><strong>A development by Realmark</strong><br><?= e($c['developer_address']) ?><br><?= e($c['developer_phone']) ?><br>
 <?php if ($c['main_site_url']): ?><a href="<?= e($c['main_site_url']) ?>" target="_blank" rel="noopener">Visit realmarkrealty.in</a><?php endif; ?></div>
