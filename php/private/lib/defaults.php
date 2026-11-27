@@ -61,7 +61,7 @@ function default_content(): array {
         ],
         'phone' => '+91 98367 80001',
         'email' => 'connect@realmarkrealty.in',
-        'whatsapp' => '',   // digits with country code, e.g. 919836780001 — leave blank until confirmed
+        'whatsapp' => '919836780001',   // digits with country code (same as the site office number)
         'site_address' => '61, Hanspukur Green Park Road, Joka, Kolkata 700104',
         'map_image' => 'assets/map-location.jpg', // screenshot of Google Maps, links to Google Maps
         'map_query' => 'Hanspukur Green Park Road, Joka, Kolkata 700104',
