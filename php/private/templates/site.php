@@ -64,7 +64,7 @@ $planLabel = function (array $p): string {
 
 <section id="top" class="hero<?= $c['hero_video'] ? ' has-video' : '' ?>">
 <?php if ($c['hero_video']): ?>
-<video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="/assets/hero.jpg" aria-hidden="true"><source src="<?= e(media_url($c['hero_video'])) ?>" type="video/mp4"></video>
+<video class="hero-video" autoplay muted loop playsinline preload="auto" poster="<?= e(media_url($c['hero_poster'] ?: 'assets/hero.jpg')) ?>" aria-hidden="true"><?php if ($c['hero_video_mobile']): ?><source src="<?= e(media_url($c['hero_video_mobile'])) ?>" type="video/mp4" media="(max-width: 700px)"><?php endif; ?><source src="<?= e(media_url($c['hero_video'])) ?>" type="video/mp4"></video>
 <button type="button" class="video-toggle" aria-pressed="false" aria-label="Pause background video">Pause</button>
 <?php endif; ?>
 <div class="wrap">

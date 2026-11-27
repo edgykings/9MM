@@ -73,7 +73,9 @@ function default_content(): array {
         'banner_link' => '#register',
 
         // Added 26 Nov 2026 (feedback round 1)
-        'hero_video' => '',     // uploads/… .mp4 teaser; the hero image shows until one is uploaded
+        'hero_video' => 'assets/hero-teaser.mp4',            // walkthrough film, 960×540, muted loop
+        'hero_video_mobile' => 'assets/hero-teaser-640.mp4', // lighter copy for phones ('' = use the main one)
+        'hero_poster' => 'assets/hero-video-poster.jpg',     // first frame, shown while the video loads
         'near_images' => [
             'N' => 'assets/gallery/tower-metro-thumb.jpg',
             'E' => 'assets/gallery/living-thumb.jpg',

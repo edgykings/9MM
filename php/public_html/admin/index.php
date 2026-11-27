@@ -272,10 +272,10 @@ if ($isPost) {
                 flash('Brochure uploaded. Visitors can download it after registering.'); go('media', '#brochure');
 
             case 'hero_video':
-                if (!empty($_POST['remove'])) { delete_upload(content()['hero_video']); save_content(['hero_video' => '']); flash('Teaser video removed. The hero image shows instead.'); go('media', '#hero-video'); }
+                if (!empty($_POST['remove'])) { delete_upload(content()['hero_video']); save_content(['hero_video' => '', 'hero_video_mobile' => '', 'hero_poster' => '']); flash('Teaser video removed. The hero image shows instead.'); go('media', '#hero-video'); }
                 $mp4 = save_video_upload($_FILES['file'] ?? []);
                 delete_upload(content()['hero_video']);
-                save_content(['hero_video' => $mp4]);
+                save_content(['hero_video' => $mp4, 'hero_video_mobile' => '', 'hero_poster' => '']);
                 flash('Teaser video uploaded. It now plays at the top of the site.'); go('media', '#hero-video');
 
             case 'near_image':
