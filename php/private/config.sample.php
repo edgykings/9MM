@@ -7,7 +7,7 @@ return [
     'farvision_url'       => 'https://fvintegration.farvisioncloud.com/LeadSync/api/SyncLeadsV2/RawLeads',
     'farvision_client_id' => '',
     'farvision_product'   => '9 MINNUTES',
-    'farvision_campaign'  => '9MIN Test',
+    'farvision_campaign'  => 'Website',          // must exist in Farvision with this exact spelling
 
     // Optional email alert for every lead (blank = off). The subject says
     // "ACTION NEEDED" when Farvision did not accept the lead.

@@ -34,7 +34,7 @@ Copy `private/config.sample.php` to `private/config.php` and set:
 |---|---|
 | `farvision_client_id` | The ClientId from Farvision/Gamut. **Treat it as a password.** |
 | `farvision_product` | `9 MINNUTES` (already set; product ID 6 in Farvision) |
-| `farvision_campaign` | `9MIN Test` (already set; campaign ID 31 in Farvision) |
+| `farvision_campaign` | `Website` (already set). **Before launch, check this Campaign exists in Farvision under Product 9 MINNUTES with exactly this spelling**; create it if not. `9MIN Test` was the test campaign |
 | `alert_email` | Optional. Pre-sales inbox that gets an email for every lead, e.g. `presales@realmarkrealty.com`. Subject starts with "ACTION NEEDED" if Farvision did not accept the lead |
 | `alert_from` | Optional. Sender address on the microsite domain, e.g. `no-reply@<domain>` (create it in cPanel → Email Accounts so mail isn't marked as spam) |
 | `setup_token` | 20+ random characters. Needed once, to create the first admin account. |
@@ -51,7 +51,7 @@ Open `https://<domain>/admin/`, enter the setup code from `config.php`, your ema
 
 1. Submit the form on the site with a team member's mobile number.
 2. In the admin panel → **Leads**, it should show **Sent**.
-3. In Farvision, it should appear under product 9 MINNUTES and campaign 9MIN Test.
+3. In Farvision, it should appear under product 9 MINNUTES and campaign Website.
 4. If it shows **Failed**, hover over the label to see Farvision's reply. The lead is still saved, so press **Retry** once the problem is fixed.
 5. Turn on HTTPS redirection: uncomment the last three lines of `public_html/.htaccess` once the SSL certificate is active.
 

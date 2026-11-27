@@ -29,7 +29,7 @@ function fv_payload(array $lead): array {
         'comments' => fv_comments($lead),
         'originFrom' => 'Auto Lead from Digital',
         'product' => cfg('farvision_product', '9 MINNUTES'),
-        'campaign' => cfg('farvision_campaign', '9MIN Test'),
+        'campaign' => cfg('farvision_campaign', 'Website'),
         'isUpdatefromUIDate' => false,
         'isImported' => true,
         'DumpdataObjectId' => $lead['dump_id'],
