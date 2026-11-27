@@ -60,14 +60,10 @@
     button.disabled = true;
     button.textContent = "Sending…";
 
-    // Preview copy (no server behind it): show the thank-you without sending anything.
+    // Preview copy (no server behind it): go to the thank-you page without sending anything.
     if (window.LEAD_PREVIEW) {
-      form.hidden = true;
-      document.getElementById("lead-name").textContent = ", " + name.split(" ")[0];
-      var t = document.getElementById("lead-thanks"); t.hidden = false;
-      var n = document.createElement("p"); n.className = "preview-note";
-      n.textContent = "Preview only: nothing was sent. On the live site this enquiry is saved and goes straight to Farvision.";
-      t.appendChild(n);
+      try { sessionStorage.setItem("9m_lead", JSON.stringify({ name: name, preview: true })); } catch (e) {}
+      window.location.href = "thank-you.html";
       return;
     }
 
@@ -79,14 +75,9 @@
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
       .then(function (res) {
         if (!res.ok || !res.body.ok) throw new Error(res.body && res.body.error || "failed");
-        // Conversion signals for ads (only fire if GTM / Pixel are installed).
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: "lead_submitted", lead_event_id: payload.event_id, bhk: payload.bhk });
-        if (typeof window.fbq === "function") window.fbq("track", "Lead", {}, { eventID: payload.event_id });
-
-        form.hidden = true;
-        document.getElementById("lead-name").textContent = ", " + name.split(" ")[0];
-        document.getElementById("lead-thanks").hidden = false;
+        // Conversion events fire on the thank-you page (one page view per lead).
+        try { sessionStorage.setItem("9m_lead", JSON.stringify({ name: name, event_id: payload.event_id, bhk: payload.bhk })); } catch (e) {}
+        window.location.href = "/thank-you.php";
       })
       .catch(function () {
         showError("Sorry, that didn't go through. Please try again, or call us on +91 98367 80001.");
@@ -94,6 +85,20 @@
         button.textContent = "Register interest";
       });
   });
+})();
+
+// Thank-you page: greet by name and send the conversion once per lead.
+(function () {
+  "use strict";
+  if (!document.getElementById("ty")) return;
+  var lead = null;
+  try { lead = JSON.parse(sessionStorage.getItem("9m_lead") || "null"); sessionStorage.removeItem("9m_lead"); } catch (e) {}
+  if (!lead) return; // opened directly or refreshed: no conversion
+  if (lead.name) document.getElementById("ty-name").textContent = ", " + String(lead.name).split(" ")[0];
+  if (lead.preview) { document.getElementById("ty-preview").hidden = false; return; }
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: "lead_submitted", lead_event_id: lead.event_id, bhk: lead.bhk });
+  if (typeof window.fbq === "function") window.fbq("track", "Lead", {}, { eventID: lead.event_id });
 })();
 
 // Residences: clicking a BHK card opens its floor plans right below that row.

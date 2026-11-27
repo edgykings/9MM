@@ -38,7 +38,7 @@ function mp_stage(array $m, string $class = ''): void {
 </div>
 <?php }
 
-function render_head(array $c, array $s, string $title, string $description): void {
+function render_head(array $c, array $s, string $title, string $description, bool $noindex = false): void {
     $t = $s['tracking'];
     $gtm = valid_gtm($t['gtm_id'] ?? ''); $pixel = valid_pixel($t['meta_pixel_id'] ?? ''); $ga4 = valid_ga4($t['ga4_id'] ?? '');
     ?><!doctype html>
@@ -48,6 +48,7 @@ function render_head(array $c, array $s, string $title, string $description): vo
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><?= e($title) ?></title>
 <meta name="description" content="<?= e($description) ?>">
+<?php if ($noindex): ?><meta name="robots" content="noindex,nofollow"><?php endif; ?>
 <meta property="og:title" content="9 Minnutes, Joka – Joka's most walkable address">
 <meta property="og:description" content="2, 3 &amp; 4 BHK residences a 9-minute walk from Joka Metro. Register for launch priority.">
 <meta property="og:image" content="/assets/hero.jpg">
