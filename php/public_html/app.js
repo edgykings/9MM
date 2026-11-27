@@ -137,7 +137,8 @@
 (function () {
   var v = document.querySelector(".hero-video"), b = document.querySelector(".video-toggle");
   if (!v || !b) return;
-  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) { v.pause(); b.hidden = true; return; }
+  // Plays for everyone (the client wants the film seen); the Pause button stays available.
+  var p = v.play && v.play(); if (p && p.catch) p.catch(function () { b.textContent = "Play"; b.setAttribute("aria-pressed", "true"); });
   b.addEventListener("click", function () {
     if (v.paused) { v.play(); b.textContent = "Pause"; b.setAttribute("aria-pressed", "false"); b.setAttribute("aria-label", "Pause background video"); }
     else { v.pause(); b.textContent = "Play"; b.setAttribute("aria-pressed", "true"); b.setAttribute("aria-label", "Play background video"); }
