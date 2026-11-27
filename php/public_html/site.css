@@ -289,3 +289,10 @@ footer .disc{margin:0;font-size:12px;line-height:1.6}
 .foot-logo-box{display:flex;align-items:center;height:44px;margin-bottom:14px}
 .foot-logo-box .foot-logo{margin:0;height:26px;width:auto}
 .foot-logo-box .foot-logo-9{height:40px}
+
+/* enquiry form: typed text always black (also in dark mode and with autofill) */
+#lead-form{color-scheme:light}
+#lead-form input:not([type=checkbox]),#lead-form select,#lead-form textarea{color:#111;-webkit-text-fill-color:#111;caret-color:#111}
+#lead-form input::placeholder{color:#76787A;-webkit-text-fill-color:#76787A;opacity:1}
+#lead-form select option{color:#111;background:#fff}
+#lead-form input:-webkit-autofill{-webkit-box-shadow:0 0 0 40px #fff inset;-webkit-text-fill-color:#111}
