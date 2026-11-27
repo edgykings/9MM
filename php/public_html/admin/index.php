@@ -331,6 +331,13 @@ if ($isPost) {
                 save_content(['legacy' => array_map(fn($x) => array_diff_key($x, ['order' => 1]), $out)]);
                 flash('Brand Legacy saved.'); go('media', '#legacy');
 
+            case 'walkthrough':
+                if (!empty($_POST['remove'])) { delete_upload(content()['walkthrough_video']); save_content(['walkthrough_video' => '', 'walkthrough_poster' => '']); flash('Walkthrough film removed.'); go('media', '#video'); }
+                $mp4 = save_video_upload($_FILES['file'] ?? []);
+                delete_upload(content()['walkthrough_video']);
+                save_content(['walkthrough_video' => $mp4, 'walkthrough_poster' => '']);
+                flash('Walkthrough film uploaded to the Gallery section.'); go('media', '#video');
+
             case 'video':
                 $url = str_in('video_url', 300);
                 if ($url !== '' && !youtube_id($url)) throw new RuntimeException('Paste a YouTube link (youtube.com/watch?v=… or youtu.be/…).');
@@ -393,7 +400,7 @@ if ($c['whatsapp'] === '') $todos[] = ['WhatsApp number (button hidden until set
 if (!$c['masterplan_final']) $todos[] = ['Final master plan', 'media', '#masterplan'];
 if (!empty($c['mp_map']['on']) && empty($c['mp_map']['confirmed'])) $todos[] = ['Check the master plan position on the aerial view', 'media', '#mp-map'];
 if ($c['brochure'] === '') $todos[] = ['Brochure PDF', 'media', '#brochure'];
-if ($c['video_url'] === '') $todos[] = ['Walkthrough video', 'media', '#video'];
+if ($c['video_url'] === '' && $c['walkthrough_video'] === '') $todos[] = ['Walkthrough video', 'media', '#video'];
 if ($c['hero_video'] === '') $todos[] = ['Teaser video for the top of the page', 'media', '#hero-video'];
 if (!$c['reviews']) $todos[] = ['Customer review videos', 'media', '#reviews'];
 if (!$c['legacy']) $todos[] = ['Brand Legacy: previous projects', 'media', '#legacy'];
@@ -595,8 +602,12 @@ case 'media':
 
         <section class="card" id="video"><h2>Walkthrough video</h2>
           <form method="post" class="row"><?= csrf_field() ?><input type="hidden" name="action" value="video">
-            <label class="grow">YouTube link (blank removes it)<input name="video_url" value="<?= e($c['video_url']) ?>" placeholder="https://www.youtube.com/watch?v=…"></label>
+            <label class="grow">YouTube link (optional; if set, it shows instead of the uploaded film)<input name="video_url" value="<?= e($c['video_url']) ?>" placeholder="https://www.youtube.com/watch?v=…"></label>
             <button class="btn">Save</button></form>
+          <?php if ($c['walkthrough_video']): ?><video src="<?= e(media_url($c['walkthrough_video'])) ?>" class="preview" controls preload="none" poster="<?= e(media_url($c['walkthrough_poster'] ?: 'assets/hero.jpg')) ?>"></video><?php endif; ?>
+          <form method="post" enctype="multipart/form-data" class="row"><?= csrf_field() ?><input type="hidden" name="action" value="walkthrough">
+            <label>Upload the film (MP4 with sound, up to 80 MB)<input type="file" name="file" accept="video/mp4" required></label><button class="btn ghost">Upload</button></form>
+          <?php if ($c['walkthrough_video']): ?><form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="walkthrough"><input type="hidden" name="remove" value="1"><button class="link danger">Remove the film</button></form><?php endif; ?>
         </section>
 
         <section class="card" id="masterplan"><h2>Master plan</h2>

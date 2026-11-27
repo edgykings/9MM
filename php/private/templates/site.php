@@ -136,7 +136,7 @@ $planLabel = function (array $p): string {
 </template>
 <?php endforeach; ?>
 <p style="margin:28px 0 0;font-size:15px;font-weight:300">
-<?php if ($s['show_prices']): ?><?= e($c['price_note']) ?> <?php else: ?>Prices will be announced at launch. Registered buyers hear first. <?php endif; ?>
+<?php if ($s['show_prices']): ?><?= e($c['price_note']) ?> Prices will be announced at launch. Registered buyers hear first. <?php endif; ?>
 <a href="#register">Register now</a></p>
 </div></section>
 
@@ -180,6 +180,8 @@ $planLabel = function (array $p): string {
 </div>
 <?php if ($yt): ?>
 <div class="video" id="video"><iframe src="https://www.youtube-nocookie.com/embed/<?= e($yt) ?>" title="9 Minnutes walkthrough film" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<?php elseif ($c['walkthrough_video']): ?>
+<div class="video" id="video"><video controls playsinline preload="none" poster="<?= e(media_url($c['walkthrough_poster'] ?: 'assets/hero.jpg')) ?>" title="9 Minnutes walkthrough film"><source src="<?= e(media_url($c['walkthrough_video'])) ?>" type="video/mp4"></video><span class="ai-label">Artist's impression</span></div>
 <?php elseif ($s['show_todo_tags']): ?>
 <div class="video empty" id="video"><div><div style="font-size:24px;font-weight:300;margin-bottom:10px">Walkthrough film</div><?= $todo('ADD VIDEO: YouTube link in the admin panel') ?></div></div>
 <?php endif; ?>

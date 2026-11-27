@@ -75,6 +75,8 @@ function default_content(): array {
         // Added 26 Nov 2026 (feedback round 1)
         'hero_video' => 'assets/hero-teaser.mp4',            // walkthrough film, 1920×1080 (from the 4K master), muted loop
         'hero_video_mobile' => 'assets/hero-teaser-640.mp4', // 1280×720 copy for phones ('' = use the main one)
+        'walkthrough_video' => 'assets/walkthrough.mp4',          // full film with sound, Gallery section (a YouTube link takes priority)
+        'walkthrough_poster' => 'assets/walkthrough-poster.jpg',
         'hero_poster' => 'assets/hero-video-poster.jpg',     // first frame, shown while the video loads
         'near_images' => [
             'N' => 'assets/gallery/tower-metro-thumb.jpg',
