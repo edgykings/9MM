@@ -158,7 +158,7 @@ if ($isPost) {
                     if ($new[$k] !== '' && !preg_match('~^https://\S+$~', $new[$k])) { unset($new[$k]); $warn[] = "$label must start with https://"; }
                 }
                 $social = [];
-                foreach (['facebook', 'instagram', 'youtube', 'linkedin', 'x'] as $k) {
+                foreach (['instagram', 'facebook', 'facebook2', 'linkedin', 'youtube', 'x'] as $k) {
                     $u = mb_substr(trim((string)($_POST['social'][$k] ?? '')), 0, 300);
                     if ($u !== '' && !preg_match('~^https://\S+$~', $u)) { $warn[] = ucfirst($k) . ' link must start with https://'; $u = content()['social'][$k] ?? ''; }
                     $social[$k] = $u;
@@ -506,7 +506,7 @@ case 'content':
             <div class="grid2">
               <label>Blog link<input name="blog_url" value="<?= e($c['blog_url']) ?>" maxlength="300" placeholder="https://www.realmarkrealty.in/blog"></label>
               <label>Realmark main website<input name="main_site_url" value="<?= e($c['main_site_url']) ?>" maxlength="300"></label>
-              <?php foreach (['facebook' => 'Facebook', 'instagram' => 'Instagram', 'youtube' => 'YouTube', 'linkedin' => 'LinkedIn', 'x' => 'X (Twitter)'] as $k => $label): ?>
+              <?php foreach (['instagram' => 'Instagram', 'facebook' => 'Facebook (main)', 'facebook2' => 'Facebook (second)', 'linkedin' => 'LinkedIn', 'youtube' => 'YouTube', 'x' => 'X (Twitter)'] as $k => $label): ?>
               <label><?= $label ?> page<input name="social[<?= $k ?>]" value="<?= e($c['social'][$k] ?? '') ?>" maxlength="300" placeholder="https://…"></label>
               <?php endforeach; ?>
             </div>

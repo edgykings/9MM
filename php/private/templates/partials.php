@@ -24,7 +24,7 @@ function social_icon(string $k): string {
         'youtube' => '<rect x="2.5" y="5.5" width="19" height="13" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 9v6l5-3-5-3Z" fill="currentColor"/>',
         'linkedin' => '<rect x="3.5" y="3.5" width="17" height="17" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 10v6.5M7.5 7.3v.2M11 16.5V10m0 3.2c0-1.8 1-3.2 2.7-3.2 1.6 0 2.3 1.1 2.3 2.9v3.6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/>',
         'x' => '<path d="M4 4l16 16M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
-    ][$k] ?? '';
+    ][$k === 'facebook2' ? 'facebook' : $k] ?? '';
     return '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">' . $p . '</svg>';
 }
 
@@ -96,7 +96,7 @@ function render_header(array $c, array $s, string $base = ''): void {
 function render_footer(array $c, array $s, string $base = ''): void {
     $telHref = 'tel:' . preg_replace('/[^\d+]/', '', $c['phone']);
     $socials = array_filter($c['social'] ?? [], fn($u) => trim((string)$u) !== '');
-    $labels = ['facebook' => 'Facebook', 'instagram' => 'Instagram', 'youtube' => 'YouTube', 'linkedin' => 'LinkedIn', 'x' => 'X'];
+    $labels = ['facebook' => 'Facebook', 'facebook2' => 'Facebook (realmarktm)', 'instagram' => 'Instagram', 'youtube' => 'YouTube', 'linkedin' => 'LinkedIn', 'x' => 'X'];
     ?>
 <footer id="contact"><div class="in">
 <h2 class="foot-h">Get in touch</h2>
@@ -113,7 +113,7 @@ function render_footer(array $c, array $s, string $base = ''): void {
 <li><a href="<?= e($c['main_site_url'] ?: 'https://www.realmarkrealty.in') ?>" target="_blank" rel="noopener">Realmark main website</a></li>
 </ul></div>
 <div><strong>Follow Realmark</strong>
-<?php if ($socials): ?><div class="social"><?php foreach ($socials as $k => $u): ?><a href="<?= e($u) ?>" target="_blank" rel="noopener" aria-label="Realmark on <?= e($labels[$k] ?? $k) ?>"><?= social_icon($k) ?></a><?php endforeach; ?></div>
+<?php if ($socials): ?><div class="social"><?php foreach ($socials as $k => $u): ?><a href="<?= e($u) ?>" target="_blank" rel="noopener" aria-label="Realmark on <?= e($labels[$k] ?? $k) ?>" title="<?= e($labels[$k] ?? $k) ?>"><?= social_icon($k) ?></a><?php endforeach; ?></div>
 <?php else: ?><p style="margin:6px 0 0"><?= todo_tag($s, 'ADD SOCIAL MEDIA LINKS') ?></p><?php endif; ?></div>
 </div>
 <p class="rera">WBRERA Registration No.
