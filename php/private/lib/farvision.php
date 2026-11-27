@@ -72,3 +72,21 @@ function fv_sync_row(int $id): array {
         ->execute([$ok ? 'sent' : 'failed', $msg, $id]);
     return [$ok, $msg];
 }
+
+/** Optional email to pre-sales for each lead (config alert_email). Never blocks the visitor. */
+function lead_alert(array $lead, int $id, bool $fvOk, string $fvMsg): void {
+    $to = trim((string)cfg('alert_email', ''));
+    if ($to === '' || !function_exists('mail')) return;
+    $from = trim((string)cfg('alert_from', ''));
+    $one = fn($v) => str_replace(["\r", "\n"], ' ', (string)$v);
+    $subject = ($fvOk ? 'New 9 Minnutes lead: ' : 'ACTION NEEDED, lead not in Farvision: ') . $one($lead['name']);
+    $src = implode(' / ', array_filter([$lead['utm_source'] ?? '', $lead['utm_medium'] ?? '', $lead['utm_campaign'] ?? '']));
+    $body = "Name: {$lead['name']}\nPhone: +91{$lead['phone']}\nEmail: {$lead['email']}\n"
+          . "Home: {$lead['bhk']}\nBest time to call: {$lead['slot']}\n"
+          . 'Source: ' . ($src !== '' ? $src : 'direct / unknown') . "\n"
+          . "Lead #$id, received {$lead['created_at']}\n\n"
+          . 'Farvision: ' . ($fvOk ? 'accepted' : "NOT accepted ($fvMsg). Retry from the admin panel → Leads, or enter it by hand.") . "\n";
+    $headers = 'Content-Type: text/plain; charset=UTF-8';
+    if ($from !== '' && filter_var($from, FILTER_VALIDATE_EMAIL)) $headers .= "\r\nFrom: 9 Minnutes website <$from>";
+    if (!@mail($to, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, $headers)) error_log("[lead] #$id alert email not sent");
+}

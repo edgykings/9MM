@@ -35,6 +35,8 @@ Copy `private/config.sample.php` to `private/config.php` and set:
 | `farvision_client_id` | The ClientId from Farvision/Gamut. **Treat it as a password.** |
 | `farvision_product` | `9 MINNUTES` (already set; product ID 6 in Farvision) |
 | `farvision_campaign` | `9MIN Test` (already set; campaign ID 31 in Farvision) |
+| `alert_email` | Optional. Pre-sales inbox that gets an email for every lead, e.g. `presales@realmarkrealty.com`. Subject starts with "ACTION NEEDED" if Farvision did not accept the lead |
+| `alert_from` | Optional. Sender address on the microsite domain, e.g. `no-reply@<domain>` (create it in cPanel → Email Accounts so mail isn't marked as spam) |
 | `setup_token` | 20+ random characters. Needed once, to create the first admin account. |
 
 PHP settings (cPanel → MultiPHP INI Editor): `upload_max_filesize = 100M` and `post_max_size = 110M`, so the teaser video (MP4, up to 80 MB) can be uploaded from the admin panel. PHP extensions needed: `pdo_sqlite`, `curl`, `gd`, `fileinfo`, `mbstring`.

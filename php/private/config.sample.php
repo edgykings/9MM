@@ -9,6 +9,10 @@ return [
     'farvision_product'   => '9 MINNUTES',
     'farvision_campaign'  => '9MIN Test',
 
+    // Optional email alert for every lead (blank = off). The subject says
+    // "ACTION NEEDED" when Farvision did not accept the lead.
+    'alert_email' => '',                       // e.g. presales@realmarkrealty.com (comma-separate several)
+    'alert_from'  => '',                       // e.g. no-reply@your-microsite-domain (an address on this domain)
     // One-time code needed to create the first admin account at /admin/.
     // Use 20+ random characters, create the account, then you may blank it.
     'setup_token' => '',

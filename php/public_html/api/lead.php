@@ -75,4 +75,5 @@ try {
 
 [$ok, $msg] = fv_sync_row($id);
 if (!$ok) error_log("[lead] #$id Farvision failed: $msg");
+lead_alert($lead, $id, $ok, (string)$msg);
 out(200, ['ok' => true]); // saved on our server; failed syncs can be retried from the admin panel
