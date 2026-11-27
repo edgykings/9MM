@@ -50,7 +50,7 @@ function render_head(array $c, array $s, string $title, string $description, boo
 <meta name="description" content="<?= e($description) ?>">
 <?php if ($noindex): ?><meta name="robots" content="noindex,nofollow"><?php endif; ?>
 <meta property="og:title" content="9 Minnutes, Joka – Joka's most walkable address">
-<meta property="og:description" content="2, 3 &amp; 4 BHK residences a 9-minute walk from Joka Metro. Register for launch priority.">
+<meta property="og:description" content="2, 3 &amp; 4 BHK residences near Joka Metro. Register your interest.">
 <meta property="og:image" content="/assets/hero.jpg">
 <meta property="og:type" content="website">
 <link rel="icon" href="/assets/pin-9.png" type="image/png">

@@ -10,11 +10,11 @@ $wa = wa_link($c);
 <img src="/assets/logo-9minnutes.svg" alt="9 Minnutes" class="ty-logo">
 <p class="eyebrow">Registration received</p>
 <h1 class="h2">Thank you<span id="ty-name"></span>.</h1>
-<p class="lead">You're on the 9 Minnutes priority list. Our team will call you shortly to share prices, floor plans and launch offers before anyone else.</p>
+<p class="lead">You're on the 9 Minnutes priority list. Our team will call you shortly to share prices, floor plans and current offers.</p>
 <p id="ty-preview" class="preview-note" hidden>Preview only: nothing was sent. On the live site this enquiry is saved and goes straight to Farvision.</p>
 <ol class="ty-steps">
 <li><strong>A call from our team</strong><span>Usually within one working day, at the time you picked.</span></li>
-<li><strong>Prices and floor plans</strong><span>For the home you're looking for, before the public launch.</span></li>
+<li><strong>Prices and floor plans</strong><span>For the home you're looking for.</span></li>
 <li><strong>A site visit</strong><span>See Hanspukur Green Park Road and the 9-minute walk to Joka Metro for yourself.</span></li>
 </ol>
 <div class="ty-actions">

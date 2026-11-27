@@ -1,3 +1,51 @@
+// Shared checks for mobile numbers and email addresses (used by every form).
+window.NMV = (function () {
+  "use strict";
+  function cleanPhone(v) {
+    var d = String(v || "").replace(/[^\d]/g, "");
+    if (d.length === 12 && d.indexOf("91") === 0) d = d.slice(2);
+    if (d.length === 11 && d.charAt(0) === "0") d = d.slice(1);
+    return d;
+  }
+  function phoneProblem(v) {
+    var d = cleanPhone(v);
+    if (!d) return "Please enter your mobile number.";
+    if (d.length !== 10) return "Mobile number must be 10 digits.";
+    if (!/^[6-9]/.test(d)) return "Indian mobile numbers start with 6, 7, 8 or 9.";
+    if (/^(\d)\1{9}$/.test(d) || d === "9876543210" || d === "6789012345" || d === "1234567890") return "Please enter your real mobile number.";
+    return "";
+  }
+  function emailProblem(v) {
+    v = String(v || "").trim();
+    if (!v) return "";
+    if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(v) || /\.\./.test(v)) return "Please enter a valid email address, like name@gmail.com.";
+    return "";
+  }
+  function mark(input, msg) {
+    var slot = input.parentNode.querySelector(".field-msg");
+    if (slot) slot.textContent = msg;
+    input.classList.toggle("invalid", !!msg);
+    input.setAttribute("aria-invalid", msg ? "true" : "false");
+  }
+  // Live checks: digits only in phone fields; messages after leaving a field, cleared as soon as it's fixed.
+  function wire(form) {
+    if (!form) return;
+    var ph = form.querySelector('input[name="phone"]'), em = form.querySelector('input[name="email"]');
+    if (ph) {
+      ph.addEventListener("input", function () {
+        var v = ph.value.replace(/[^\d+ ]/g, ""); if (v !== ph.value) ph.value = v;
+        if (ph.classList.contains("invalid")) mark(ph, phoneProblem(ph.value));
+      });
+      ph.addEventListener("blur", function () { if (ph.value) mark(ph, phoneProblem(ph.value)); });
+    }
+    if (em) {
+      em.addEventListener("input", function () { if (em.classList.contains("invalid")) mark(em, emailProblem(em.value)); });
+      em.addEventListener("blur", function () { mark(em, emailProblem(em.value)); });
+    }
+  }
+  return { cleanPhone: cleanPhone, phoneProblem: phoneProblem, emailProblem: emailProblem, mark: mark, wire: wire };
+})();
+
 // 9 Minnutes microsite: lead form + campaign capture.
 (function () {
   "use strict";
@@ -23,12 +71,8 @@
   var button = form.querySelector('button[type="submit"]');
 
   function showError(msg) { errorBox.textContent = msg; }
-  function cleanPhone(v) {
-    var d = (v || "").replace(/[^\d]/g, "");
-    if (d.length === 12 && d.indexOf("91") === 0) d = d.slice(2);
-    if (d.length === 11 && d.charAt(0) === "0") d = d.slice(1);
-    return d;
-  }
+  var cleanPhone = NMV.cleanPhone;
+  NMV.wire(form);
   function eventId() {
     return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
   }
@@ -41,7 +85,11 @@
     var name = (f.get("name") || "").trim();
     var phone = cleanPhone(f.get("phone"));
     if (name.length < 2) return showError("Please enter your name.");
-    if (!/^[6-9]\d{9}$/.test(phone)) return showError("Please enter a valid 10-digit mobile number.");
+    var pp = NMV.phoneProblem(f.get("phone")), ep = NMV.emailProblem(f.get("email"));
+    NMV.mark(form.querySelector('input[name="phone"]'), pp);
+    NMV.mark(form.querySelector('input[name="email"]'), ep);
+    if (pp) return showError(pp);
+    if (ep) return showError(ep);
     if (!f.get("bhk")) return showError("Please choose the home you're looking for.");
     if (!f.get("consent")) return showError("Please tick the consent box so our team can contact you.");
 
@@ -193,4 +241,122 @@ document.addEventListener("click", function (e) {
   });
   box.querySelector(".lb-close").addEventListener("click", function () { box.close(); });
   box.addEventListener("click", function (e) { if (e.target === box) box.close(); });
+})();
+
+
+// Brochure: a click on any "Download brochure" opens a small form; after a valid
+// mobile number the lead is saved (and sent to Farvision) and the PDF downloads.
+(function () {
+  "use strict";
+  var modal = document.getElementById("brochure-modal");
+  if (!modal) return;
+  var file = modal.getAttribute("data-file");
+  var form = document.getElementById("brochure-form");
+  var err = modal.querySelector(".bm-error");
+  var btn = form.querySelector('button[type="submit"]');
+  var lastFocus = null;
+  NMV.wire(form);
+
+  function unlocked() { try { return sessionStorage.getItem("9m_brochure") === "1"; } catch (e) { return false; } }
+  function download() {
+    var a = document.createElement("a");
+    a.href = file; a.setAttribute("download", ""); a.rel = "noopener";
+    document.body.appendChild(a); a.click(); a.parentNode.removeChild(a);
+  }
+  function open() {
+    lastFocus = document.activeElement;
+    modal.hidden = false; document.documentElement.classList.add("bm-open");
+    var first = form.querySelector('input[name="phone"]'); if (first && !document.getElementById("bm-step1").hidden) first.focus();
+  }
+  function close() {
+    modal.hidden = true; document.documentElement.classList.remove("bm-open");
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest && e.target.closest(".js-brochure");
+    if (!t) return;
+    e.preventDefault();
+    if (unlocked()) { download(); return; } // already shared a number in this visit
+    open();
+  });
+  modal.addEventListener("click", function (e) { if (e.target === modal || (e.target.closest && e.target.closest(".bm-close"))) close(); });
+  document.addEventListener("keydown", function (e) { if (!modal.hidden && (e.key === "Escape" || e.key === "Esc")) close(); });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    err.textContent = "";
+    var f = new FormData(form);
+    var pp = NMV.phoneProblem(f.get("phone"));
+    NMV.mark(form.querySelector('input[name="phone"]'), pp);
+    if (pp) { form.querySelector('input[name="phone"]').focus(); return; } // message shows under the field
+    if (!f.get("consent")) { err.textContent = "Please tick the consent box to continue."; return; }
+    var name = String(f.get("name") || "").trim();
+    var eid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
+    var attr = {}; try { attr = JSON.parse(sessionStorage.getItem("9m_attr") || "{}"); } catch (x) {}
+    function done() {
+      try { sessionStorage.setItem("9m_brochure", "1"); } catch (x) {}
+      document.getElementById("bm-step1").hidden = true;
+      document.getElementById("bm-step2").hidden = false;
+      download();
+    }
+    btn.disabled = true; btn.textContent = "Preparing…";
+    if (window.LEAD_PREVIEW) { done(); return; } // preview copy: nothing is sent
+    fetch("/api/lead.php", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ source: "brochure", name: name, phone: NMV.cleanPhone(f.get("phone")), consent: true, company: f.get("company") || "", event_id: eid, attribution: attr })
+    })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+      .then(function (res) {
+        if (!res.ok || !res.body.ok) throw new Error((res.body && res.body.error) || "failed");
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: "brochure_download", lead_event_id: eid });
+        if (typeof window.fbq === "function") window.fbq("track", "Lead", { content_name: "Brochure" }, { eventID: eid });
+        done();
+      })
+      .catch(function (x) {
+        err.textContent = x && x.message === "phone" ? "Please enter a valid 10-digit mobile number." : "Sorry, that didn't go through. Please try again.";
+        btn.disabled = false; btn.textContent = "Download brochure";
+      });
+  });
+})();
+
+// Carousels (Gallery, Brand Legacy): scroll by themselves, pause while the visitor
+// is touching, hovering or reading elsewhere; arrows move one card at a time.
+(function () {
+  "use strict";
+  var list = document.querySelectorAll(".carousel");
+  Array.prototype.forEach.call(list, function (car) {
+    var track = car.querySelector(".car-track");
+    if (!track || track.children.length < 2) return;
+    var delay = parseInt(car.getAttribute("data-auto"), 10) || 3500;
+    var paused = false, visible = true, timer = null;
+    function step() {
+      var card = track.children[0];
+      var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    }
+    function go(dir) {
+      var max = track.scrollWidth - track.clientWidth - 2;
+      if (max <= 0) return;
+      var x = track.scrollLeft + dir * step();
+      if (dir > 0 && track.scrollLeft >= max) x = 0;            // end reached: back to the start
+      else if (dir < 0 && track.scrollLeft <= 2) x = max;       // start: jump to the end
+      if (track.scrollTo) track.scrollTo({ left: x, behavior: "smooth" }); else track.scrollLeft = x;
+    }
+    function tick() { if (!paused && visible && !document.hidden) go(1); }
+    function start() { if (!timer) timer = setInterval(tick, delay); }
+    function hold() { paused = true; }
+    function release() { paused = false; }
+    car.addEventListener("mouseenter", hold); car.addEventListener("mouseleave", release);
+    car.addEventListener("focusin", hold); car.addEventListener("focusout", release);
+    track.addEventListener("touchstart", hold, { passive: true });
+    track.addEventListener("touchend", function () { setTimeout(release, 4000); }, { passive: true });
+    var prev = car.querySelector(".car-btn.prev"), next = car.querySelector(".car-btn.next");
+    if (prev) prev.addEventListener("click", function () { go(-1); });
+    if (next) next.addEventListener("click", function () { go(1); });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { threshold: 0.3 }).observe(car);
+    }
+    start();
+  });
 })();

@@ -39,8 +39,18 @@ $bhkOptions = ['Not sure yet'];
 foreach (content()['homes'] as $h) $bhkOptions[] = $h['bhk'] . ' – ' . $h['label'];
 $slots = ['Any time', 'Morning (10 am – 1 pm)', 'Afternoon (1 – 5 pm)', 'Evening (5 – 8 pm)'];
 
+// Brochure download: only a mobile number is required.
+$brochure = ($b['source'] ?? '') === 'brochure';
+if ($brochure) {
+    if (!content()['brochure']) out(400, ['ok' => false, 'error' => 'brochure']);
+    if (mb_strlen($name) < 2) $name = 'Brochure Enquiry';
+    $b['bhk'] = 'Brochure download';
+    $b['slot'] = 'Any time';
+    $bhkOptions[] = 'Brochure download';
+}
+
 if (mb_strlen($name) < 2) out(400, ['ok' => false, 'error' => 'name']);
-if (!preg_match('/^[6-9]\d{9}$/', $phone)) out(400, ['ok' => false, 'error' => 'phone']);
+if (!preg_match('/^[6-9]\d{9}$/', $phone) || preg_match('/^(\d)\1{9}$/', $phone) || in_array($phone, ['9876543210', '6789012345'], true)) out(400, ['ok' => false, 'error' => 'phone']);
 if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) out(400, ['ok' => false, 'error' => 'email']);
 if (!in_array($b['bhk'] ?? '', $bhkOptions, true)) out(400, ['ok' => false, 'error' => 'bhk']);
 if (($b['consent'] ?? null) !== true) out(400, ['ok' => false, 'error' => 'consent']);

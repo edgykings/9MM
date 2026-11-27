@@ -18,9 +18,9 @@ function default_content(): array {
     $gallery = array_map(fn($g) => ['image' => "assets/gallery/{$g[0]}.jpg", 'thumb' => "assets/gallery/{$g[0]}-thumb.jpg", 'caption' => $g[1]], $gal);
 
     return [
-        'hero_eyebrow'  => 'Pre-launch · Joka, Kolkata',
+        'hero_eyebrow'  => 'Joka, Kolkata',
         'hero_title'    => "the\nwalkable\naddress",
-        'hero_subtitle' => '2, 3 & 4 BHK residences on Hanspukur Green Park Road, a 9-minute walk from Joka Metro.',
+        'hero_subtitle' => '2, 3 & 4 BHK residences near Joka Metro.',
         'facts' => [
             ['value' => '9 min', 'label' => 'walk to Joka Metro (0.7 km)'],
             ['value' => '127', 'label' => 'residences in a single G+11 tower'],
@@ -47,13 +47,13 @@ function default_content(): array {
         'mp_map' => ['on' => true, 'aerial' => 'assets/masterplan-aerial.jpg', 'plan' => 'assets/masterplan-cutout.png',
                      'x' => 54.9, 'y' => 27.2, 'w' => 13.0, 'r' => -165.0, 'z' => 2.2, 'confirmed' => false,
                      'credit' => 'Aerial imagery: Esri, Maxar. Indicative placement.'],
-        'brochure' => '',
+        'brochure' => 'assets/9minnutes-brochure.pdf', // downloaded after the visitor shares a mobile number
         'faq' => [
             ['q' => 'Where exactly is 9 Minnutes?', 'a' => '61, Hanspukur Green Park Road, Joka, Kolkata 700104, about 150 metres from Diamond Harbour Road.'],
             ['q' => 'How far is the Metro?', 'a' => 'Joka Metro station on the Purple Line is 0.7 km away, about a 9-minute walk.'],
             ['q' => 'What types of homes are there?', 'a' => '2 BHK (Essential), 3 BHK (Smart and Premium) and 4 BHK (Signature) apartments, with carpet areas from 600 to 1,099 sq. ft. Select 3 and 4 BHK homes have terraces.'],
             ['q' => 'How big is the project?', 'a' => 'A single G+11 tower with 127 residences and a 16,400 sq. ft. lifestyle club.'],
-            ['q' => 'What are the prices?', 'a' => 'Prices will be announced at launch. Register your interest and our team will share them with you first.'],
+            ['q' => 'What are the prices?', 'a' => 'Register your interest and our team will share the latest prices and offers with you.'],
             ['q' => 'When is possession?', 'a' => ''],
             ['q' => 'Is the project RERA registered?', 'a' => ''],
             ['q' => 'Does the area come under KMC?', 'a' => ''],
@@ -69,7 +69,7 @@ function default_content(): array {
         'developer_phone' => '+91 33 3504 3333',
         'rera_number' => '',
         'disclaimer' => '',
-        'banner_text' => 'Pre-launch registrations now open',
+        'banner_text' => 'Registrations now open',
         'banner_link' => '#register',
 
         // Added 26 Nov 2026 (feedback round 1)

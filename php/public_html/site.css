@@ -335,3 +335,44 @@ footer .disc{margin:0;font-size:12px;line-height:1.6}
 @media (max-width:640px){.reg-float{font-size:13px;padding:16px 9px}}
 /* "Artist's impression" tags switched off in admin */
 .no-ai .aiw::after,.no-ai .ai-label{display:none}
+
+/* Hero: 9 Minnutes logo above the headline */
+.hero-logo{display:block;height:64px;width:auto;margin:0 0 26px}
+@media (max-width:640px){.hero-logo{height:46px;margin-bottom:18px}}
+
+/* Carousels (Gallery, Brand Legacy) */
+.carousel{position:relative}
+.car-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+.car-track::-webkit-scrollbar{display:none}
+.car-track>*{flex:0 0 calc((100% - 36px)/4);scroll-snap-align:start;min-width:0}
+.car-track.legacy{gap:24px;margin-top:32px}
+.car-track.legacy>*{flex-basis:calc((100% - 48px)/3)}
+.car-btn{position:absolute;top:calc(50% - 22px);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#1C3A50;font-size:28px;line-height:1;box-shadow:0 3px 12px rgba(0,0,0,.18);z-index:2;display:flex;align-items:center;justify-content:center;padding:0 0 3px}
+.car-btn.prev{left:-14px}.car-btn.next{right:-14px}
+.car-track.legacy~.car-btn{top:calc(50% - 40px)}
+@media (max-width:1000px){.car-track>*{flex-basis:calc((100% - 12px)/2)}.car-track.legacy>*{flex-basis:calc((100% - 24px)/2)}}
+@media (max-width:640px){.car-track>*,.car-track.legacy>*{flex-basis:82%}.car-btn{width:38px;height:38px;font-size:24px}.car-btn.prev{left:4px}.car-btn.next{right:4px}}
+
+/* Field messages (mobile / email checks) */
+.field-msg{display:block;min-height:0;font-size:13px;font-weight:400;color:#A32D2D}
+.field-msg:empty{display:none}
+input.invalid{border-color:#C0392B!important;background:#FFF6F5!important}
+
+/* Brochure popup (opens only when the visitor clicks "Download brochure") */
+.bmodal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(20,30,40,.72);display:flex;align-items:center;justify-content:center;padding:16px}
+.bmodal[hidden]{display:none!important}
+html.bm-open,html.bm-open body{overflow:hidden}
+.bm-box{position:relative;background:#fff;color:#2E3133;width:100%;max-width:440px;max-height:calc(100vh - 32px);overflow:auto;padding:32px 28px 28px;border-radius:6px;box-shadow:0 20px 50px rgba(0,0,0,.35);color-scheme:light}
+.bm-close{position:absolute;top:8px;right:8px;width:40px;height:40px;border:0;background:none;font-size:30px;line-height:1;color:#58595B}
+.bm-logo{height:38px;width:auto;display:block;margin:0 0 18px}
+.bm-box h3{margin:0 0 8px;font-size:24px;font-weight:400;color:#1C3A50}
+.bm-lead{margin:0 0 20px;font-size:15px;line-height:1.55;color:#58595B}
+#brochure-form{display:grid;gap:14px}
+#brochure-form label{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500}
+#brochure-form input:not([type=checkbox]){height:48px;padding:0 12px;border:1px solid #9A9C9E;font-size:16px;background:#fff;color:#111;-webkit-text-fill-color:#111}
+#brochure-form .consent{flex-direction:row;align-items:flex-start;gap:10px;font-size:13px;font-weight:300;line-height:1.5}
+#brochure-form .consent input{width:20px;height:20px;margin:0;flex:none}
+#brochure-form button{height:52px;border:0;border-radius:999px;background:#B48B2A;color:#fff;font-size:16px;font-weight:600}
+#brochure-form button[disabled]{opacity:.6}
+.bm-error{margin:0;color:#A32D2D;font-size:14px;min-height:1em}
+.bm-error:empty{display:none}

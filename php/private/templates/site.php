@@ -59,7 +59,7 @@ $planLabel = function (array $p): string {
     for ($i = 2; $i < count($parts); $i++) $parts[$i] = ucwords(strtolower($parts[$i]));
     return implode(' · ', $parts);
 };
-?><?php render_head($c, $s, '9 Minnutes, Joka – 2, 3 & 4 BHK homes a 9-minute walk from Joka Metro | Realmark', '9 Minnutes by Realmark: 2, 3 & 4 BHK residences on Hanspukur Green Park Road, Joka, a 9-minute walk from Joka Metro. Register for launch priority.'); ?>
+?><?php render_head($c, $s, '9 Minnutes, Joka – 2, 3 & 4 BHK homes a 9-minute walk from Joka Metro | Realmark', '9 Minnutes by Realmark: 2, 3 & 4 BHK residences on Hanspukur Green Park Road, Joka, a 9-minute walk from Joka Metro. Register your interest.'); ?>
 <?php render_header($c, $s); ?>
 
 <section id="top" class="hero<?= $c['hero_video'] ? ' has-video' : '' ?>">
@@ -68,10 +68,11 @@ $planLabel = function (array $p): string {
 <button type="button" class="video-toggle" aria-pressed="false" aria-label="Pause background video">Pause</button>
 <?php endif; ?>
 <div class="wrap">
-<p class="kicker"><?= e($c['hero_eyebrow']) ?></p>
+<img src="/assets/logo-9minnutes-light.svg" alt="9 Minnutes" class="hero-logo" width="294" height="72">
+<?php if (trim($c['hero_eyebrow']) !== ''): ?><p class="kicker"><?= e($c['hero_eyebrow']) ?></p><?php endif; ?>
 <h1><?= nl($c['hero_title']) ?></h1>
 <p class="sub"><?= e($c['hero_subtitle']) ?></p>
-<div class="ctas"><a href="#register" class="btn btn-gold">Register for launch priority</a><a href="#near" class="btn btn-line">Explore the project</a></div>
+<div class="ctas"><a href="#register" class="btn btn-gold">Register your interest</a><?php if ($c['brochure']): ?><a href="<?= e(media_url($c['brochure'])) ?>" class="btn btn-line js-brochure">Download brochure</a><?php else: ?><a href="#near" class="btn btn-line">Explore the project</a><?php endif; ?></div>
 <?php if (!$c['hero_video'] && $s['show_todo_tags']): ?><p style="margin:24px 0 0"><?= $todo('TEASER VIDEO: upload in admin → Images & files') ?></p><?php endif; ?>
 </div>
 <span class="ai-label">Artist's impression</span>
@@ -136,7 +137,7 @@ $planLabel = function (array $p): string {
 </template>
 <?php endforeach; ?>
 <p style="margin:28px 0 0;font-size:15px;font-weight:300">
-<?php if ($s['show_prices']): ?><?= e($c['price_note']) ?> Prices will be announced at launch. Registered buyers hear first. <?php endif; ?>
+<?php if ($s['show_prices']): ?><?= e($c['price_note']) ?> Register to get the latest prices first. <?php endif; ?>
 <a href="#register">Register now</a></p>
 </div></section>
 
@@ -173,10 +174,13 @@ $planLabel = function (array $p): string {
 <section id="gallery" class="blush"><div class="wrap">
 <p class="eyebrow">Gallery</p>
 <h2 class="h2">A look around.</h2>
-<div class="grid gallery" style="margin-top:32px">
+<div class="carousel" data-auto="3500" style="margin-top:32px">
+<div class="car-track gallery">
 <?php foreach ($c['gallery'] as $g): ?>
 <a href="<?= e(media_url($g['image'])) ?>" class="zoom aiw" data-caption="<?= e($g['caption']) ?> (artist's impression)"><img src="<?= e(media_url($g['thumb'] ?: $g['image'])) ?>" alt="<?= e($g['caption']) ?>, artist's impression" loading="lazy"></a>
 <?php endforeach; ?>
+</div>
+<button type="button" class="car-btn prev" aria-label="Previous images">‹</button><button type="button" class="car-btn next" aria-label="Next images">›</button>
 </div>
 <?php if ($yt): ?>
 <div class="video" id="video"><iframe src="https://www.youtube-nocookie.com/embed/<?= e($yt) ?>" title="9 Minnutes walkthrough film" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
@@ -262,11 +266,14 @@ $planLabel = function (array $p): string {
 <p class="eyebrow">Brand Legacy</p>
 <h2 class="h2">Homes Realmark has built.</h2>
 <?php if ($c['legacy']): ?>
-<div class="grid legacy">
+<div class="carousel" data-auto="3000">
+<div class="car-track legacy">
 <?php foreach ($c['legacy'] as $p): ?>
 <?php $img = '<img src="' . e(media_url($p['thumb'] ?: $p['image'])) . '" alt="' . e($p['name']) . '" loading="lazy">'; ?>
 <figure><?= !empty($p['photo']) ? '<span class="aiw-none">' . $img . '</span>' : ai($img) ?><figcaption><strong><?= e($p['name']) ?></strong><?php if (!empty($p['location'])): ?><span><?= e($p['location']) ?></span><?php endif; ?></figcaption></figure>
 <?php endforeach; ?>
+</div>
+<button type="button" class="car-btn prev" aria-label="Previous projects">‹</button><button type="button" class="car-btn next" aria-label="Next projects">›</button>
 </div>
 <?php else: ?>
 <div class="grid legacy"><?php for ($i = 0; $i < 4; $i++): ?><figure><div class="legacy-empty">Project photo</div><figcaption><strong>Project name</strong></figcaption></figure><?php endfor; ?></div>
@@ -277,8 +284,8 @@ $planLabel = function (array $p): string {
 
 <section id="register" class="register navy"><div class="wrap">
 <div class="col">
-<h2 class="h2">Be first in line<br>at launch.</h2>
-<p style="margin:0 0 28px;font-size:18px;font-weight:300;line-height:1.6;opacity:.92">Register your interest<?= $c['brochure'] ? ' to download the brochure' : '' ?>. Our team will call you before prices are announced, with floor plans and pre-launch details.</p>
+<h2 class="h2">Find your home<br>at 9 Minnutes.</h2>
+<p style="margin:0 0 28px;font-size:18px;font-weight:300;line-height:1.6;opacity:.92">Register your interest and our team will call you with prices, floor plans and offers.<?php if ($c['brochure']): ?> <a href="<?= e(media_url($c['brochure'])) ?>" class="js-brochure" style="color:#E9C977">Download the brochure</a>.<?php endif; ?></p>
 <p style="margin:0;font-size:16px;font-weight:300;line-height:1.8">Prefer to talk now?<br><a href="<?= e($telHref) ?>" class="tel"><?= e($c['phone']) ?></a><br><a href="mailto:<?= e($c['email']) ?>" style="color:#fff"><?= e($c['email']) ?></a></p>
 </div>
 <div class="box">
@@ -287,8 +294,8 @@ $planLabel = function (array $p): string {
 <?php else: ?>
 <form id="lead-form" novalidate>
 <label>Full name<input name="name" required maxlength="80" autocomplete="name"></label>
-<label>Mobile number<input name="phone" type="tel" required inputmode="tel" maxlength="16" autocomplete="tel" placeholder="10-digit mobile"></label>
-<label class="full">Email (optional)<input name="email" type="email" maxlength="120" autocomplete="email"></label>
+<label>Mobile number<input name="phone" type="tel" required inputmode="numeric" maxlength="18" autocomplete="tel" placeholder="10-digit mobile"><span class="field-msg" aria-live="polite"></span></label>
+<label class="full">Email (optional)<input name="email" type="email" maxlength="120" autocomplete="email" inputmode="email"><span class="field-msg" aria-live="polite"></span></label>
 <label>Home you're looking for<select name="bhk" required><option value="">Select</option>
 <?php foreach ($c['homes'] as $h): if (!empty($s['sold_out'][$h['tier']])) continue; ?><option><?= e($h['bhk'] . ' – ' . $h['label']) ?></option><?php endforeach; ?>
 <option>Not sure yet</option></select></label>
@@ -300,7 +307,7 @@ $planLabel = function (array $p): string {
 </form>
 <div id="lead-thanks" role="status" hidden style="padding:24px 0">
 <h3 style="margin:0 0 12px;font-size:28px;font-weight:400;color:#1C3A50">Thank you<span id="lead-name"></span>.</h3>
-<p style="margin:0;font-size:17px;font-weight:300;line-height:1.6">You're on the 9 Minnutes priority list. Our team will call you before the launch.</p>
+<p style="margin:0;font-size:17px;font-weight:300;line-height:1.6">You're on the 9 Minnutes priority list. Our team will call you shortly.</p>
 <?php if ($c['brochure']): ?><p style="margin:18px 0 0"><a href="<?= e(media_url($c['brochure'])) ?>" class="btn btn-navy" download>Download the brochure</a></p><?php endif; ?>
 </div>
 <?php endif; ?>
@@ -308,6 +315,31 @@ $planLabel = function (array $p): string {
 </div></section>
 
 <?php render_footer($c, $s); ?>
+<?php if ($c['brochure'] && !$s['form_paused']): ?>
+<div class="bmodal" id="brochure-modal" hidden data-file="<?= e(media_url($c['brochure'])) ?>">
+<div class="bm-box" role="dialog" aria-modal="true" aria-labelledby="bm-title">
+<button type="button" class="bm-close" aria-label="Close">×</button>
+<img src="/assets/logo-9minnutes.svg" alt="9 Minnutes" class="bm-logo">
+<div id="bm-step1">
+<h3 id="bm-title">Download the brochure</h3>
+<p class="bm-lead">Share your mobile number and the 9 Minnutes brochure downloads right away.</p>
+<form id="brochure-form" novalidate>
+<label>Mobile number<input name="phone" type="tel" required inputmode="numeric" maxlength="18" autocomplete="tel" placeholder="10-digit mobile number"><span class="field-msg" aria-live="polite"></span></label>
+<label>Name (optional)<input name="name" maxlength="80" autocomplete="name"></label>
+<div class="hp" aria-hidden="true"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
+<label class="consent"><input type="checkbox" name="consent" required>I agree to be contacted by Realmark Realty about 9 Minnutes by call, SMS, WhatsApp and email.</label>
+<p class="bm-error" role="alert"></p>
+<button type="submit">Download brochure</button>
+</form>
+</div>
+<div id="bm-step2" hidden role="status">
+<h3>Your brochure is downloading</h3>
+<p class="bm-lead">Our team may call you to share prices and floor plans.</p>
+<p><a href="<?= e(media_url($c['brochure'])) ?>" class="btn btn-navy" download>Didn't start? Download again</a></p>
+</div>
+</div>
+</div>
+<?php endif; ?>
 <dialog id="lightbox" aria-label="Enlarged image"><button type="button" class="lb-close" aria-label="Close">×</button><img alt=""><p class="lb-cap"></p></dialog>
 <script src="/mpmap.js?v=<?= @filemtime(PUBLIC_DIR . '/mpmap.js') ?>" defer></script>
 <script src="/app.js?v=<?= @filemtime(PUBLIC_DIR . '/app.js') ?>" defer></script>

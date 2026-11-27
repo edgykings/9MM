@@ -6,7 +6,9 @@ function fv_dump_id(): string {
 }
 
 function fv_comments(array $lead): string {
-    $bits = ['Looking for: ' . $lead['bhk'], 'Best time to call: ' . ($lead['slot'] ?: 'Any time'), 'Source: 9 Minnutes microsite'];
+    $bits = $lead['bhk'] === 'Brochure download'
+        ? ['Request: downloaded the brochure from the website', 'Source: 9 Minnutes microsite']
+        : ['Looking for: ' . $lead['bhk'], 'Best time to call: ' . ($lead['slot'] ?: 'Any time'), 'Source: 9 Minnutes microsite'];
     $utm = [];
     foreach (['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as $k) {
         if (!empty($lead[$k])) $utm[] = "$k=" . $lead[$k];
