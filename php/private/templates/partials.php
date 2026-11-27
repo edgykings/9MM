@@ -85,7 +85,7 @@ function render_header(array $c, array $s, string $base = ''): void {
 <a href="<?= $base ?>#near">NEAR</a><a href="<?= $base ?>#residences">Residences</a><a href="<?= $base ?>#amenities">Amenities</a><a href="<?= $base ?>#gallery">Gallery</a><a href="<?= $base ?>#masterplan">Master plan</a><a href="<?= $base ?>#location">Location</a><a href="<?= $base ?>#faq">FAQ</a>
 </nav>
 <div class="right">
-<a href="<?= $base ?>#register" class="cta">Register interest</a>
+<?php if ($wa): ?><a href="<?= e($wa) ?>" class="wa-top" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><?= wa_icon() ?></a><?php endif; ?>
 
 <a href="<?= $base ?>#top" class="logo-9" aria-label="9 Minnutes home"><img src="/assets/logo-9minnutes.svg" alt="9 Minnutes"></a>
 </div>
@@ -121,10 +121,6 @@ function render_footer(array $c, array $s, string $base = ''): void {
 <?php else: ?><?= todo_tag($s, 'ADD RERA REGISTRATION NUMBER') ?> · <a href="https://rera.wb.gov.in/" target="_blank" rel="noopener">rera.wb.gov.in</a><?php endif; ?></p>
 <p class="disc">All images are artist's impressions. Specifications, areas and amenities are indicative and subject to change. <a href="/disclaimer.php">Read the full disclaimer</a>.</p>
 </div></footer>
-<?php $wa = wa_link($c); if ($wa): ?>
-<a href="<?= e($wa) ?>" class="wa-float" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><?= wa_icon(28) ?></a>
-<?php elseif ($s['show_todo_tags']): ?>
-<span class="wa-float off" title="WhatsApp number to be added in the admin panel"><?= wa_icon(28) ?></span>
-<?php endif; ?>
+<a href="<?= $base ?>#register" class="reg-float">Register interest</a>
 <?php
 }

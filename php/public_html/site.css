@@ -329,10 +329,9 @@ footer .disc{margin:0;font-size:12px;line-height:1.6}
 }
 @media (max-width:640px){@supports not (aspect-ratio:1/1){.mpmap{padding-top:75%}}}
 
-/* WhatsApp: floating, centred on the right edge of the screen */
-.wa-float{position:fixed;right:16px;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);z-index:60;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:background .2s}
-.wa-float:hover{background:#1EBE57}
-.wa-float.off{background:#B9C9BF;cursor:help}
-@media (max-width:640px){.wa-float{right:12px;width:50px;height:50px}}
+/* Register interest: floating tab, centred on the right edge of the screen */
+.reg-float{position:fixed;right:0;top:50%;z-index:60;-webkit-transform:translateY(-50%);transform:translateY(-50%);writing-mode:vertical-rl;-webkit-writing-mode:vertical-rl;background:#B48B2A;color:#fff;text-decoration:none;font-weight:500;font-size:15px;letter-spacing:.03em;padding:20px 12px;border-radius:10px 0 0 10px;box-shadow:0 6px 18px rgba(0,0,0,.22);white-space:nowrap}
+.reg-float:hover{background:#9C7722;color:#fff}
+@media (max-width:640px){.reg-float{font-size:13px;padding:16px 9px}}
 /* "Artist's impression" tags switched off in admin */
 .no-ai .aiw::after,.no-ai .ai-label{display:none}
