@@ -192,7 +192,7 @@ $planLabel = function (array $p): string {
 <p class="lead">One G+11 tower with landscaped spaces to relax, play, celebrate and connect, on Hanspukur Green Park Road.</p>
 <?php $mp = $c['mp_map']; if (!empty($mp['on'])): ?>
 <?php mp_stage($mp); ?>
-<p class="mp-actions"><a href="<?= e(media_url($c['masterplan'])) ?>" class="zoom btn-line" data-caption="Master plan with legend (artist's impression)">View the master plan with legend</a></p>
+<p class="mp-actions"><a href="<?= e(media_url($c['masterplan'])) ?>" class="zoom btn-navy-line" data-caption="Master plan with legend (artist's impression)">View the master plan with legend</a></p>
 <?php if (empty($mp['confirmed'])): ?><p style="margin:12px 0 0;font-size:13px"><?= $todo('CONFIRM: plot position on the aerial view (admin → Images & files → Master plan on aerial view)') ?></p><?php endif; ?>
 <?php else: ?>
 <a href="<?= e(media_url($c['masterplan'])) ?>" class="zoom aiw" data-caption="Master plan (artist's impression)" style="display:block"><img src="<?= e(media_url($c['masterplan'])) ?>" alt="Master plan of 9 Minnutes showing the tower, landscaped areas, pool and amenities" loading="lazy" style="width:100%;height:auto;display:block;border:1px solid #E4DCD8"></a>
