@@ -18,7 +18,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible,summary:focus-visi
 .todo{background:#FFF3CD;color:#6A4700;padding:2px 6px;font-size:.85em}
 .btn{display:inline-block;text-decoration:none;padding:16px 30px;border-radius:999px;font-size:17px;font-weight:500;border:0;cursor:pointer}
 .btn-gold{background:#B48B2A;color:#fff}.btn-gold:hover{color:#fff;background:#9C7720}
-.btn-line{border:1px solid rgba(255,255,255,.8);color:#fff;background:rgba(20,30,40,.35);backdrop-filter:blur(4px)}.btn-line:hover{color:#fff;background:rgba(255,255,255,.1)}
+.btn-line{border:1px solid rgba(255,255,255,.8);color:#fff;background:rgba(20,30,40,.35);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}.btn-line:hover{color:#fff;background:rgba(255,255,255,.1)}
 .btn-navy{background:#1C3A50;color:#fff}.btn-navy:hover{color:#fff;background:#14293a}
 .grid{display:grid;gap:24px}
 .split{display:flex;flex-wrap:wrap;gap:40px 80px;align-items:flex-end;margin-bottom:56px}
