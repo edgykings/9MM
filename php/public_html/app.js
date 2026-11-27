@@ -60,6 +60,17 @@
     button.disabled = true;
     button.textContent = "Sending…";
 
+    // Preview copy (no server behind it): show the thank-you without sending anything.
+    if (window.LEAD_PREVIEW) {
+      form.hidden = true;
+      document.getElementById("lead-name").textContent = ", " + name.split(" ")[0];
+      var t = document.getElementById("lead-thanks"); t.hidden = false;
+      var n = document.createElement("p"); n.className = "preview-note";
+      n.textContent = "Preview only: nothing was sent. On the live site this enquiry is saved and goes straight to Farvision.";
+      t.appendChild(n);
+      return;
+    }
+
     fetch("/api/lead.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

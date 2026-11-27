@@ -296,3 +296,5 @@ footer .disc{margin:0;font-size:12px;line-height:1.6}
 #lead-form input::placeholder{color:#76787A;-webkit-text-fill-color:#76787A;opacity:1}
 #lead-form select option{color:#111;background:#fff}
 #lead-form input:-webkit-autofill{-webkit-box-shadow:0 0 0 40px #fff inset;-webkit-text-fill-color:#111}
+
+.preview-note{margin-top:14px;padding:10px 12px;background:#FFF4D6;color:#5A4A1A;font-size:14px;border-radius:4px}
