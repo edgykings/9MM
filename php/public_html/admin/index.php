@@ -314,7 +314,7 @@ if ($isPost) {
                 if ($name === '') throw new RuntimeException('Enter the project name.');
                 $img = save_image_upload($_FILES['file'] ?? [], 1600, 640);
                 $l = content()['legacy'];
-                $l[] = ['name' => $name, 'location' => str_in('location', 80)] + $img;
+                $l[] = ['name' => $name, 'location' => str_in('location', 80), 'photo' => !empty($_POST['photo'])] + $img;
                 save_content(['legacy' => $l]);
                 flash("$name added to Brand Legacy."); go('media', '#legacy');
             case 'legacy_save':
@@ -324,6 +324,7 @@ if ($isPost) {
                     if (!empty($in['delete'])) { delete_upload($p['image']); delete_upload($p['thumb']); continue; }
                     $p['name'] = mb_substr(trim($in['name'] ?? $p['name']), 0, 80);
                     $p['location'] = mb_substr(trim($in['location'] ?? ($p['location'] ?? '')), 0, 80);
+                    $p['photo'] = !empty($in['photo']);
                     $p['order'] = (int)($in['order'] ?? $i);
                     $out[] = $p;
                 }
@@ -573,6 +574,7 @@ case 'media':
                 <label>Project name<input name="l[<?= $i ?>][name]" value="<?= e($p['name']) ?>" maxlength="80"></label>
                 <label>Location (optional)<input name="l[<?= $i ?>][location]" value="<?= e($p['location'] ?? '') ?>" maxlength="80"></label>
                 <label>Order<input name="l[<?= $i ?>][order]" type="number" value="<?= $i + 1 ?>" min="1" max="99"></label>
+                <label class="check"><input type="checkbox" name="l[<?= $i ?>][photo]" value="1" <?= !empty($p['photo']) ? 'checked' : '' ?>> Real photo (no "Artist's impression" label)</label>
                 <label class="check"><input type="checkbox" name="l[<?= $i ?>][delete]" value="1"> Remove</label></div>
             <?php endforeach; ?></div>
             <button class="btn">Save Brand Legacy</button></form>
@@ -581,6 +583,7 @@ case 'media':
             <label>Project name<input name="name" required maxlength="80"></label>
             <label>Location (optional)<input name="location" maxlength="80" placeholder="e.g. Joka"></label>
             <label>Photo<input type="file" name="file" accept="image/jpeg,image/png,image/webp" required></label>
+            <label class="check"><input type="checkbox" name="photo" value="1"> Real photo</label>
             <button class="btn ghost">Add project</button></form>
         </section>
 

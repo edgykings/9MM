@@ -264,7 +264,8 @@ $planLabel = function (array $p): string {
 <?php if ($c['legacy']): ?>
 <div class="grid legacy">
 <?php foreach ($c['legacy'] as $p): ?>
-<figure><?= ai('<img src="' . e(media_url($p['thumb'] ?: $p['image'])) . '" alt="' . e($p['name']) . '" loading="lazy">') ?><figcaption><strong><?= e($p['name']) ?></strong><?php if (!empty($p['location'])): ?><span><?= e($p['location']) ?></span><?php endif; ?></figcaption></figure>
+<?php $img = '<img src="' . e(media_url($p['thumb'] ?: $p['image'])) . '" alt="' . e($p['name']) . '" loading="lazy">'; ?>
+<figure><?= !empty($p['photo']) ? '<span class="aiw-none">' . $img . '</span>' : ai($img) ?><figcaption><strong><?= e($p['name']) ?></strong><?php if (!empty($p['location'])): ?><span><?= e($p['location']) ?></span><?php endif; ?></figcaption></figure>
 <?php endforeach; ?>
 </div>
 <?php else: ?>

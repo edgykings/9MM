@@ -85,7 +85,13 @@ function default_content(): array {
             'R' => 'assets/gallery/lawn-thumb.jpg',
         ],
         'reviews' => [],        // [{video_url, name, note}]
-        'legacy' => [],         // [{name, location, image, thumb}]
+        // Brand Legacy: [{name, location, image, thumb, photo}] — photo=true for a real photograph (no "Artist's impression" label)
+        'legacy' => [
+            ['name' => 'Realmark Lakeview', 'location' => '', 'image' => 'assets/legacy/lakeview.jpg', 'thumb' => 'assets/legacy/lakeview-thumb.jpg', 'photo' => true],
+            ['name' => 'Realmark Oracle', 'location' => '', 'image' => 'assets/legacy/oracle.jpg', 'thumb' => 'assets/legacy/oracle-thumb.jpg'],
+            ['name' => 'Realmark Residency', 'location' => 'Raypur, Maheshtala', 'image' => 'assets/legacy/residency.jpg', 'thumb' => 'assets/legacy/residency-thumb.jpg'],
+            ['name' => 'Realmark Vista', 'location' => '', 'image' => 'assets/legacy/vista.jpg', 'thumb' => 'assets/legacy/vista-thumb.jpg'],
+        ],
         'social' => ['facebook' => '', 'instagram' => '', 'youtube' => '', 'linkedin' => '', 'x' => ''],
         'blog_url' => '',
         'main_site_url' => 'https://www.realmarkrealty.in',
