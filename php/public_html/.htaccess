@@ -2,10 +2,21 @@
 Options -Indexes
 DirectoryIndex index.php
 
+# Correct file types (Safari refuses video served with the wrong type, and nosniff is on)
+<IfModule mod_mime.c>
+  AddType video/mp4 .mp4
+  AddType image/svg+xml .svg
+  AddType image/webp .webp
+</IfModule>
+# Never compress video: iPhone/iPad Safari streams it in byte ranges
+<IfModule mod_setenvif.c>
+  SetEnvIfNoCase Request_URI "\.mp4$" no-gzip dont-vary
+</IfModule>
+
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
-  <FilesMatch "\.(jpg|jpeg|png|webp|svg|css|js)$">
+  <FilesMatch "\.(jpg|jpeg|png|webp|svg|css|js|mp4)$">
     Header set Cache-Control "public, max-age=604800"
   </FilesMatch>
 </IfModule>

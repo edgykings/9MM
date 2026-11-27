@@ -64,7 +64,7 @@ $planLabel = function (array $p): string {
 
 <section id="top" class="hero<?= $c['hero_video'] ? ' has-video' : '' ?>">
 <?php if ($c['hero_video']): ?>
-<video class="hero-video" autoplay muted loop playsinline preload="auto" poster="<?= e(media_url($c['hero_poster'] ?: 'assets/hero.jpg')) ?>" aria-hidden="true"><?php if ($c['hero_video_mobile']): ?><source src="<?= e(media_url($c['hero_video_mobile'])) ?>" type="video/mp4" media="(max-width: 700px)"><?php endif; ?><source src="<?= e(media_url($c['hero_video'])) ?>" type="video/mp4"></video>
+<video class="hero-video" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto" poster="<?= e(media_url($c['hero_poster'] ?: 'assets/hero.jpg')) ?>" aria-hidden="true"><?php if ($c['hero_video_mobile']): ?><source src="<?= e(media_url($c['hero_video_mobile'])) ?>" type="video/mp4" media="(max-width: 700px)"><?php endif; ?><source src="<?= e(media_url($c['hero_video'])) ?>" type="video/mp4"></video>
 <button type="button" class="video-toggle" aria-pressed="false" aria-label="Pause background video">Pause</button>
 <?php endif; ?>
 <div class="wrap">
@@ -181,7 +181,7 @@ $planLabel = function (array $p): string {
 <?php if ($yt): ?>
 <div class="video" id="video"><iframe src="https://www.youtube-nocookie.com/embed/<?= e($yt) ?>" title="9 Minnutes walkthrough film" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
 <?php elseif ($c['walkthrough_video']): ?>
-<div class="video" id="video"><video controls playsinline preload="none" poster="<?= e(media_url($c['walkthrough_poster'] ?: 'assets/hero.jpg')) ?>" title="9 Minnutes walkthrough film"><source src="<?= e(media_url($c['walkthrough_video'])) ?>" type="video/mp4"></video><span class="ai-label">Artist's impression</span></div>
+<div class="video" id="video"><video controls playsinline webkit-playsinline preload="metadata" poster="<?= e(media_url($c['walkthrough_poster'] ?: 'assets/hero.jpg')) ?>" title="9 Minnutes walkthrough film"><source src="<?= e(media_url($c['walkthrough_video'])) ?>" type="video/mp4"></video><span class="ai-label">Artist's impression</span></div>
 <?php elseif ($s['show_todo_tags']): ?>
 <div class="video empty" id="video"><div><div style="font-size:24px;font-weight:300;margin-bottom:10px">Walkthrough film</div><?= $todo('ADD VIDEO: YouTube link in the admin panel') ?></div></div>
 <?php endif; ?>

@@ -204,8 +204,8 @@ input,textarea{cursor:text}
 .ai-label{right:16px;bottom:16px}
 
 /* hero teaser video */
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-.hero.has-video::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(28,58,80,.88) 0%,rgba(28,58,80,.6) 38%,rgba(28,58,80,0) 70%)}
+.hero-video{-webkit-transform:translateZ(0);position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero.has-video::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;z-index:1;background:linear-gradient(90deg,rgba(28,58,80,.88) 0%,rgba(28,58,80,.6) 38%,rgba(28,58,80,0) 70%)}
 .video-toggle{position:absolute;left:16px;bottom:16px;z-index:3;background:rgba(20,30,40,.62);color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:8px 14px;font-size:13px}
 
 /* NEAR images */
@@ -240,7 +240,7 @@ button.home[aria-expanded="true"] .open-plans svg{transform:rotate(180deg)}
 .yt img{width:100%;height:100%;object-fit:cover;display:block;opacity:.9}
 .yt .play{position:absolute;left:50%;top:50%;width:68px;height:48px;margin:-24px 0 0 -34px;background:#B48B2A;border-radius:12px}
 .yt .play::after{content:"";position:absolute;left:28px;top:14px;border-style:solid;border-width:10px 0 10px 16px;border-color:transparent transparent transparent #fff}
-.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.yt iframe{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;border:0}
 .review figcaption{margin-top:10px;display:flex;flex-direction:column;gap:2px}
 .review figcaption span{opacity:.8;font-size:14px}
 .review-empty,.legacy-empty{aspect-ratio:16/9;border:1px dashed rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);font-size:15px}
@@ -274,9 +274,9 @@ footer .disc{margin:0;font-size:12px;line-height:1.6}
 .mpmap{position:relative;overflow:hidden;aspect-ratio:16/9;background:#DCD6CF;border-radius:4px;isolation:isolate;user-select:none}
 .mpmap .mp-layer{position:absolute;left:0;top:0;width:100%;transform-origin:0 0}
 .mpmap .mp-aerial{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.55) brightness(1.06) contrast(.92)}
-.mpmap .mp-layer::after{content:"";position:absolute;inset:0;z-index:1;background:rgba(246,243,239,.26);pointer-events:none}
+.mpmap .mp-layer::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;z-index:1;background:rgba(246,243,239,.26);pointer-events:none}
 .mpmap .mp-plan{position:absolute;z-index:2;max-width:none;height:auto;filter:drop-shadow(0 6px 14px rgba(28,58,80,.35));transform-origin:50% 50%}
-.mpmap::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;box-shadow:inset 0 0 120px 30px rgba(246,243,239,.55)}
+.mpmap::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;z-index:3;pointer-events:none;box-shadow:inset 0 0 120px 30px rgba(246,243,239,.55)}
 .mpmap:not(.ready) .mp-plan{visibility:hidden}
 .mpmap .ai-label{position:absolute;right:12px;bottom:12px;z-index:4}
 .mpmap .mp-credit{position:absolute;left:12px;bottom:12px;z-index:4;font-size:11px;color:#1C3A50;background:rgba(255,255,255,.75);padding:3px 8px;border-radius:10px}
@@ -314,3 +314,17 @@ footer .disc{margin:0;font-size:12px;line-height:1.6}
 .btn-outline{border:1px solid #1C3A50;color:#1C3A50;background:#fff}
 .ty-back{font-size:15px;margin:0}.ty-back a{color:#1C3A50}
 @media (max-width:640px){.thankyou{padding:32px 0 56px}.ty-box{padding:28px 20px}.ty-actions .btn{width:100%;justify-content:center;text-align:center}}
+
+/* Older iPhones/iPads (iOS 14 and earlier) have no aspect-ratio: keep boxes from collapsing */
+@supports not (aspect-ratio:1/1){
+  .video,.yt,.mpmap,.review-empty,.legacy-empty{height:0;padding-top:56.25%}
+  .gallery a,.legacy-empty{height:0;padding-top:75%;position:relative}
+  .gallery a img{position:absolute;top:0;left:0;width:100%;height:100%}
+  .video iframe,.video video,.video.empty>div{position:absolute;top:0;left:0;width:100%;height:100%}
+  .video.empty{padding-top:0;height:auto;min-height:300px}
+  .yt img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+  .mpmap.mp-full{height:auto;padding-top:0}
+  .photos img,.near .near-img,.legacy img,.terrace figure img,.metro img{height:auto}
+  .map-shot img{height:auto}
+}
+@media (max-width:640px){@supports not (aspect-ratio:1/1){.mpmap{padding-top:75%}}}
