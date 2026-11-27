@@ -69,7 +69,7 @@ function render_head(array $c, array $s, string $title, string $description, boo
 <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','<?= $pixel ?>');fbq('track','PageView');</script>
 <?php endif; ?>
 </head>
-<body>
+<body<?= empty($s['ai_labels']) ? ' class="no-ai"' : '' ?>>
 <?php if ($gtm): ?><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?= $gtm ?>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><?php endif; ?>
 <?php
 }
@@ -86,11 +86,7 @@ function render_header(array $c, array $s, string $base = ''): void {
 </nav>
 <div class="right">
 <a href="<?= $base ?>#register" class="cta">Register interest</a>
-<?php if ($wa): ?>
-<a href="<?= e($wa) ?>" class="wa-top" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><?= wa_icon() ?></a>
-<?php elseif ($s['show_todo_tags']): ?>
-<span class="wa-top off" title="WhatsApp number to be added in the admin panel"><?= wa_icon() ?></span>
-<?php endif; ?>
+
 <a href="<?= $base ?>#top" class="logo-9" aria-label="9 Minnutes home"><img src="/assets/logo-9minnutes.svg" alt="9 Minnutes"></a>
 </div>
 </div></header>
@@ -125,5 +121,10 @@ function render_footer(array $c, array $s, string $base = ''): void {
 <?php else: ?><?= todo_tag($s, 'ADD RERA REGISTRATION NUMBER') ?> · <a href="https://rera.wb.gov.in/" target="_blank" rel="noopener">rera.wb.gov.in</a><?php endif; ?></p>
 <p class="disc">All images are artist's impressions. Specifications, areas and amenities are indicative and subject to change. <a href="/disclaimer.php">Read the full disclaimer</a>.</p>
 </div></footer>
+<?php $wa = wa_link($c); if ($wa): ?>
+<a href="<?= e($wa) ?>" class="wa-float" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><?= wa_icon(28) ?></a>
+<?php elseif ($s['show_todo_tags']): ?>
+<span class="wa-float off" title="WhatsApp number to be added in the admin panel"><?= wa_icon(28) ?></span>
+<?php endif; ?>
 <?php
 }

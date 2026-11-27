@@ -104,6 +104,7 @@ function default_settings(): array {
         'show_prices' => false,
         'banner_on' => false,
         'form_paused' => false,
+        'ai_labels' => false,       // "Artist's impression" tag on every image (off: one note in the gallery and footer instead)
         'show_todo_tags' => true,   // yellow [ADD]/[CONFIRM] tags for missing content
         'sold_out' => ['ESSENTIAL' => false, 'SMART' => false, 'PREMIUM' => false, 'SIGNATURE' => false],
         'tracking' => ['gtm_id' => '', 'meta_pixel_id' => '', 'ga4_id' => ''],

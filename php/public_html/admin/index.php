@@ -349,7 +349,7 @@ if ($isPost) {
                 $sold = [];
                 foreach (array_keys($GLOBALS['TIERS']) as $t) $sold[$t] = !empty($_POST['sold_out'][$t]);
                 save_settings(['show_prices' => !empty($_POST['show_prices']), 'banner_on' => !empty($_POST['banner_on']),
-                               'form_paused' => !empty($_POST['form_paused']), 'show_todo_tags' => !empty($_POST['show_todo_tags']), 'sold_out' => $sold]);
+                               'form_paused' => !empty($_POST['form_paused']), 'show_todo_tags' => !empty($_POST['show_todo_tags']), 'ai_labels' => !empty($_POST['ai_labels']), 'sold_out' => $sold]);
                 flash('Switches saved. The site has been updated.'); go('switches');
 
             case 'tracking':
@@ -685,6 +685,7 @@ case 'switches':
           <label class="switch"><input type="checkbox" name="show_prices" value="1" <?= $s['show_prices'] ? 'checked' : '' ?>><span><strong>Show prices</strong><br><span class="muted">Shows the price on each residence card (set the prices under Content). Off: "Prices will be announced at launch".</span></span></label>
           <label class="switch"><input type="checkbox" name="banner_on" value="1" <?= $s['banner_on'] ? 'checked' : '' ?>><span><strong>Announcement banner</strong><br><span class="muted">A gold strip at the very top, e.g. for a launch offer. Text and link are under Content.</span></span></label>
           <label class="switch"><input type="checkbox" name="form_paused" value="1" <?= $s['form_paused'] ? 'checked' : '' ?>><span><strong>Pause the enquiry form</strong><br><span class="muted">Replaces the form with "Registrations are paused, please call us". Turn this off again before running ads.</span></span></label>
+          <label class="switch"><input type="checkbox" name="ai_labels" value="1" <?= !empty($s['ai_labels']) ? 'checked' : '' ?>><span><strong>"Artist's impression" tag on every image</strong><br><span class="muted">Off: images are clean, and one line under the gallery plus the footer disclaimer say all visuals are artist's impressions.</span></span></label>
           <label class="switch"><input type="checkbox" name="show_todo_tags" value="1" <?= $s['show_todo_tags'] ? 'checked' : '' ?>><span><strong>Show yellow reminders for missing content</strong><br><span class="muted">Turn off before launch: missing items are then simply hidden.</span></span></label>
           <fieldset><legend>Sold out</legend><p class="muted">Marks the residence type as sold out and removes it from the form.</p>
             <?php foreach ($TIERS as $t => $label): ?><label class="check"><input type="checkbox" name="sold_out[<?= $t ?>]" value="1" <?= !empty($s['sold_out'][$t]) ? 'checked' : '' ?>> <?= e($label) ?></label><?php endforeach; ?>
